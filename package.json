@@ -1,0 +1,65 @@
+{
+  "name": "react-mui-camera",
+  "version": "0.0.1",
+  "description": "Universal Camera component for React that utilizes the Material Design System.",
+  "homepage": "https://github.com/hollyos/react-mui-camera",
+  "author": "Holly Springsteen <hhspringsteen@gmail.com>",
+  "keywords": [
+    "react",
+    "mui",
+    "camera",
+    "component",
+    "material design",
+    "universal",
+    "javascript",
+    "typescript",
+    "web",
+    "mobile",
+    "android",
+    "ios",
+    "photos",
+    "videos",
+    "media",
+    "responsive"
+  ],
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hollyos/react-mui-camera.git"
+  },
+  "bugs": {
+    "url": "http://github.com/hollyos/react-mui-camera/issues"
+  },
+  "contributors": [
+    {
+      "name": "Holly Springsteen",
+      "email": "hhspringsteen@gmail.com"
+    }
+  ],
+  "type": "commonjs",
+  "main": "index.js",
+  "engines": {
+    "node": ">= 0.4.0"
+  },
+  "scripts": {
+    "lint": "pnpm exec eslint . --ext .js,.jsx,.ts,.tsx",
+    "prepare": "husky",
+    "prettier:check": "pnpm exec prettier . --check",
+    "prettier:write": "pnpm exec prettier . --write",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "3.6.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.47.0"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  }
+}

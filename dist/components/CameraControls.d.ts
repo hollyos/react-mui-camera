@@ -13,11 +13,8 @@ import * as React from 'react';
  */
 interface CameraControlsProps {
   isFlipped: boolean;
-  isMobile: boolean;
-  mobileOS?: 'ios' | 'android' | null;
   onClose?: () => void;
   showControls: boolean;
-  switchCamera: () => void;
   toggleControls: () => void;
   toggleFlip: () => void;
 }

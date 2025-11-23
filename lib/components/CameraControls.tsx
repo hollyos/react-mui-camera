@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IconButton, Stack, Typography, Box } from '@mui/material';
 import { BsSliders } from 'react-icons/bs';
-import { MdOutlineFlipCameraIos, MdFlipCameraAndroid, MdFlip, MdClose } from 'react-icons/md';
+import { MdFlip, MdClose } from 'react-icons/md';
 
 /**
  * Props for the CameraControls component
@@ -17,11 +17,8 @@ import { MdOutlineFlipCameraIos, MdFlipCameraAndroid, MdFlip, MdClose } from 're
  */
 interface CameraControlsProps {
   isFlipped: boolean;
-  isMobile: boolean;
-  mobileOS?: 'ios' | 'android' | null;
   onClose?: () => void;
   showControls: boolean;
-  switchCamera: () => void;
   toggleControls: () => void;
   toggleFlip: () => void;
 }
@@ -64,11 +61,8 @@ interface CameraControlsProps {
  */
 const CameraControls: React.FC<CameraControlsProps> = ({
   isFlipped,
-  isMobile,
-  mobileOS,
   onClose,
   showControls,
-  switchCamera,
   toggleControls,
   toggleFlip,
 }) => {
@@ -81,13 +75,6 @@ const CameraControls: React.FC<CameraControlsProps> = ({
           <IconButton onClick={toggleControls} sx={{ p: 1, color: 'white' }}>
             <BsSliders size={24} />
           </IconButton>
-
-          {/* Camera switch button - only visible on mobile devices */}
-          {isMobile && (
-            <IconButton onClick={switchCamera} sx={{ p: 1, color: 'white' }}>
-              {mobileOS === 'android' ? <MdFlipCameraAndroid size={24} /> : <MdOutlineFlipCameraIos size={24} />}
-            </IconButton>
-          )}
 
           {/* Horizontal flip toggle button */}
           <IconButton onClick={toggleFlip} sx={{ p: 1, color: 'white' }}>

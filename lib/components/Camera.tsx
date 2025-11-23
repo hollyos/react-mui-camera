@@ -13,6 +13,7 @@ import { startCamera as startCameraUtil, stopCamera as stopCameraUtil } from '..
 import { CameraProps, FilterKey } from '../types/types';
 import { FILTERS } from '../utils/filters';
 import { detectDevice } from '../utils/device';
+import CameraSwitch from './CameraSwitch';
 
 /**
  * Camera Component
@@ -361,12 +362,9 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
           <CameraControls
             showControls={showControls}
             toggleControls={() => setShowControls(!showControls)}
-            switchCamera={handleSwitchCamera}
-            isMobile={isMobile}
             isFlipped={isFlipped}
             toggleFlip={() => setIsFlipped((prev) => !prev)}
             onClose={onClose ? handleClose : undefined}
-            mobileOS={mobileOS}
           />
 
           {/* Adjustment sliders panel */}
@@ -384,8 +382,37 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
           {/* Error display */}
           {error && <CameraError message={error} />}
 
-          {/* Capture button */}
-          <CaptureButton onCapture={handleCapturePhoto} isStreaming={isStreaming} />
+          <Box
+            sx={{
+              alignItems: 'center',
+              bottom: 0,
+              display: 'flex',
+              justifyContent: 'space-around',
+              left: 0,
+              pb: 2,
+              position: 'fixed',
+              right: 0,
+              width: '100%',
+            }}
+          >
+            <Box sx={{ width: 80 }} />
+
+            {/* Capture button */}
+            <CaptureButton
+              onCapture={handleCapturePhoto}
+              isStreaming={isStreaming}
+              mobileOS={mobileOS}
+              isMobile={isMobile}
+            />
+
+            {/* Camera switch button - only visible on mobile devices */}
+            <CameraSwitch
+              isMobile={isMobile}
+              mobileOS={mobileOS}
+              switchCamera={handleSwitchCamera}
+              facingMode={facingMode}
+            />
+          </Box>
         </>
       ) : (
         /* Image Preview Mode with Filters */

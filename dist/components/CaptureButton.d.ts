@@ -9,6 +9,8 @@ import * as React from 'react';
 interface CaptureButtonProps {
   onCapture: () => void;
   isStreaming: boolean;
+  mobileOS: 'ios' | 'android' | null;
+  isMobile: boolean;
 }
 /**
  * CaptureButton Component

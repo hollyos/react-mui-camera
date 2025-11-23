@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from 'react/jsx-runtime';
 import { IconButton, Stack, Typography, Box } from '@mui/material';
 import { BsSliders } from 'react-icons/bs';
-import { MdOutlineFlipCameraIos, MdFlipCameraAndroid, MdFlip, MdClose } from 'react-icons/md';
+import { MdFlip, MdClose } from 'react-icons/md';
 /**
  * CameraControls Component
  *
@@ -38,16 +38,7 @@ import { MdOutlineFlipCameraIos, MdFlipCameraAndroid, MdFlip, MdClose } from 're
  * @param {CameraControlsProps} props - Component props
  * @returns {JSX.Element} A header bar with camera control buttons and dynamic title
  */
-const CameraControls = ({
-  isFlipped,
-  isMobile,
-  mobileOS,
-  onClose,
-  showControls,
-  switchCamera,
-  toggleControls,
-  toggleFlip,
-}) => {
+const CameraControls = ({ isFlipped, onClose, showControls, toggleControls, toggleFlip }) => {
   return _jsx(Box, {
     sx: { position: 'absolute', top: 0, left: 0, right: 0, bgcolor: 'rgba(0,0,0,0.5)', p: 2, zIndex: 10 },
     children: _jsxs(Stack, {
@@ -62,15 +53,6 @@ const CameraControls = ({
               sx: { p: 1, color: 'white' },
               children: _jsx(BsSliders, { size: 24 }),
             }),
-            isMobile &&
-              _jsx(IconButton, {
-                onClick: switchCamera,
-                sx: { p: 1, color: 'white' },
-                children:
-                  mobileOS === 'android'
-                    ? _jsx(MdFlipCameraAndroid, { size: 24 })
-                    : _jsx(MdOutlineFlipCameraIos, { size: 24 }),
-              }),
             _jsx(IconButton, {
               onClick: toggleFlip,
               sx: { p: 1, color: 'white' },

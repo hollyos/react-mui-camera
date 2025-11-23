@@ -1,4 +1,4 @@
-import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from 'react/jsx-runtime';
+import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from 'react/jsx-runtime';
 import { useRef, useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 import ActionButtons from './ActionButtons';
@@ -11,6 +11,7 @@ import ImagePreview from './ImagePreview';
 import { startCamera as startCameraUtil, stopCamera as stopCameraUtil } from '../utils/cameraUtils';
 import { FILTERS } from '../utils/filters';
 import { detectDevice } from '../utils/device';
+import CameraSwitch from './CameraSwitch';
 /**
  * Camera Component
  *
@@ -318,12 +319,9 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
               _jsx(CameraControls, {
                 showControls: showControls,
                 toggleControls: () => setShowControls(!showControls),
-                switchCamera: handleSwitchCamera,
-                isMobile: isMobile,
                 isFlipped: isFlipped,
                 toggleFlip: () => setIsFlipped((prev) => !prev),
                 onClose: onClose ? handleClose : undefined,
-                mobileOS: mobileOS,
               }),
               showControls &&
                 _jsx(AdjustmentSliders, {
@@ -335,7 +333,34 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
                   onSaturationChange: setSaturation,
                 }),
               error && _jsx(CameraError, { message: error }),
-              _jsx(CaptureButton, { onCapture: handleCapturePhoto, isStreaming: isStreaming }),
+              _jsxs(Box, {
+                sx: {
+                  alignItems: 'center',
+                  bottom: 0,
+                  display: 'flex',
+                  justifyContent: 'space-around',
+                  left: 0,
+                  pb: 2,
+                  position: 'fixed',
+                  right: 0,
+                  width: '100%',
+                },
+                children: [
+                  _jsx(Box, { sx: { width: 80 } }),
+                  _jsx(CaptureButton, {
+                    onCapture: handleCapturePhoto,
+                    isStreaming: isStreaming,
+                    mobileOS: mobileOS,
+                    isMobile: isMobile,
+                  }),
+                  _jsx(CameraSwitch, {
+                    isMobile: isMobile,
+                    mobileOS: mobileOS,
+                    switchCamera: handleSwitchCamera,
+                    facingMode: facingMode,
+                  }),
+                ],
+              }),
             ],
           })
         : /* Image Preview Mode with Filters */

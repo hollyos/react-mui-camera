@@ -12,6 +12,8 @@ import { MdOutlinePhotoCamera } from 'react-icons/md';
 interface CaptureButtonProps {
   onCapture: () => void;
   isStreaming: boolean;
+  mobileOS: 'ios' | 'android' | null;
+  isMobile: boolean;
 }
 
 /**
@@ -63,13 +65,13 @@ interface CaptureButtonProps {
  * @param {CaptureButtonProps} props - Component props
  * @returns {JSX.Element} A circular button with camera icon for photo capture
  */
-const CaptureButton: React.FC<CaptureButtonProps> = ({ onCapture, isStreaming }) => {
+const CaptureButton: React.FC<CaptureButtonProps> = ({ onCapture, isStreaming, mobileOS, isMobile }) => {
   return (
     <Box
       sx={{
-        position: 'absolute',
-        bottom: 40,
-        left: '50%',
+        border: mobileOS === 'ios' ? '4px solid white' : 'none',
+        borderRadius: '50%',
+        padding: '4px',
         transform: 'translateX(-50%)',
         zIndex: 10,
       }}
@@ -78,9 +80,20 @@ const CaptureButton: React.FC<CaptureButtonProps> = ({ onCapture, isStreaming })
         variant='contained'
         onClick={onCapture}
         disabled={!isStreaming}
-        sx={{ width: 80, height: 80, borderRadius: '50%', p: 0, minWidth: 0 }}
+        sx={{
+          bgcolor: isMobile ? 'white' : 'primary.main',
+          borderRadius: '50%',
+          height: 80,
+          minWidth: 0,
+          p: 0,
+          width: 80,
+
+          '&:hover': {
+            bgcolor: 'primary.dark',
+          },
+        }}
       >
-        <MdOutlinePhotoCamera size={40} fill='white' />
+        {!isMobile && <MdOutlinePhotoCamera size={40} fill='white' />}
       </Button>
     </Box>
   );

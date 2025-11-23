@@ -52,6 +52,7 @@ You must have these installed in your application:
 - `react-dom` (>= 18)
 - `@mui/material` (>= 7)
 - `@mui/icons-material` (>= 7)
+- `react-icons` (>= 5)
 
 ---
 

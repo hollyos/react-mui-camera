@@ -1,6 +1,12 @@
 import { jsx as _jsx, jsxs as _jsxs } from 'react/jsx-runtime';
-import { Button, Box } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Button, Box, IconButton, Collapse } from '@mui/material';
 import { MdDownloading, MdClose } from 'react-icons/md';
+import { BsSliders } from 'react-icons/bs';
+import { RiColorFilterAiLine } from 'react-icons/ri';
+import FilterSelector from './FilterSelector';
+import AdjustmentSliders from './AdjustmentSliders';
+import CollapsableContainer from './CollapsableContainer';
 /**
  * ActionButtons Component
  *
@@ -12,47 +18,141 @@ import { MdDownloading, MdClose } from 'react-icons/md';
  * and includes proper z-indexing for overlay scenarios.
  *
  * @component
- * @example
- * ```tsx
- * <ActionButtons
- *   onRetake={() => resetCamera()}
- *   onSave={() => savePhoto()}
- *   showSave={true}
- * />
- * ```
- *
- * @param {ActionButtonsProps} props - Component props
- * @returns {JSX.Element} A horizontally aligned button group with retake and optional save actions
  */
-const ActionButtons = ({ onRetake, onSave, showSave = true }) => {
+const ActionButtons = ({ onRetake, onSave, showSave = true, toggleFilters, toggleControls }) => {
   return _jsxs(Box, {
     sx: {
-      position: 'absolute',
-      bottom: 20,
-      left: '50%',
-      transform: 'translateX(-50%)',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      bottom: 0,
+      boxShadow: '0 -2px 8px rgba(0,0,0,0.3)',
+      boxSizing: 'border-box',
       display: 'flex',
       gap: 2,
+      height: '72px',
+      justifyContent: 'space-between',
+      left: '50%',
+      px: 4,
+      py: 2,
+      position: 'absolute',
+      transform: 'translateX(-50%)',
+      width: '100%',
       zIndex: 10,
     },
     children: [
-      _jsx(Button, {
-        variant: 'outlined',
-        onClick: onRetake,
-        sx: { color: 'white', borderColor: 'rgba(255,255,255,0.5)' },
-        startIcon: _jsx(MdClose, { width: 20, height: 20, fill: 'white' }),
-        children: 'Retake',
+      _jsxs(Box, {
+        children: [
+          _jsx(IconButton, {
+            sx: { color: 'white' },
+            onClick: toggleFilters,
+            children: _jsx(RiColorFilterAiLine, { size: 24, color: 'white' }),
+          }),
+          _jsx(IconButton, {
+            sx: { color: 'white' },
+            onClick: toggleControls,
+            children: _jsx(BsSliders, { size: 24, color: 'white' }),
+          }),
+        ],
       }),
-      showSave &&
-        onSave &&
-        _jsx(Button, {
-          variant: 'contained',
-          onClick: onSave,
-          sx: { bgcolor: 'primary.main', color: 'white' },
-          startIcon: _jsx(MdDownloading, { size: 20 }),
-          children: 'Save Photo',
-        }),
+      _jsxs(Box, {
+        sx: { display: 'flex', gap: 2 },
+        children: [
+          _jsx(Button, {
+            variant: 'outlined',
+            onClick: onRetake,
+            sx: { color: 'white', borderColor: 'rgba(255,255,255,0.5)' },
+            startIcon: _jsx(MdClose, { width: 20, height: 20, fill: 'white' }),
+            children: 'Retake',
+          }),
+          showSave &&
+            onSave &&
+            _jsx(Button, {
+              variant: 'contained',
+              onClick: onSave,
+              sx: { bgcolor: 'primary.main', color: 'white' },
+              startIcon: _jsx(MdDownloading, { size: 20 }),
+              children: 'Save Photo',
+            }),
+        ],
+      }),
     ],
   });
 };
-export default ActionButtons;
+const ActionBar = ({
+  capturedImage,
+  onRetake,
+  onSave,
+  selectedFilter,
+  setSelectedFilter,
+  showSave = true,
+  skipFilters,
+  imageAdjustments,
+  onAdjustmentsChange,
+}) => {
+  const [openPanel, setOpenPanel] = useState(null);
+  const toggleFilters = () => {
+    setOpenPanel((prev) => (prev === 'filters' ? null : 'filters'));
+  };
+  const toggleAdjustments = () => {
+    setOpenPanel((prev) => (prev === 'adjustments' ? null : 'adjustments'));
+  };
+  useEffect(() => {
+    const handleSwipeAdjustmentClose = () => {
+      if (openPanel === 'adjustments') setOpenPanel(null);
+    };
+    const handleSwipeFilterClose = () => {
+      if (openPanel === 'filters') setOpenPanel(null);
+    };
+    window.addEventListener('adjustmentSwipeClose', handleSwipeAdjustmentClose);
+    window.addEventListener('filterSwipeClose', handleSwipeFilterClose);
+    return () => {
+      window.removeEventListener('adjustmentSwipeClose', handleSwipeAdjustmentClose);
+      window.removeEventListener('filterSwipeClose', handleSwipeFilterClose);
+    };
+  }, [openPanel]);
+  return _jsxs(Box, {
+    sx: { position: 'relative' },
+    children: [
+      !skipFilters &&
+        _jsx(Collapse, {
+          in: openPanel === 'filters',
+          timeout: 'auto',
+          unmountOnExit: true,
+          sx: { position: 'absolute', bottom: '72px', width: '100%' },
+          children: _jsx(CollapsableContainer, {
+            position: 'top',
+            onCloseEvent: 'filterSwipeClose',
+            children: _jsx(FilterSelector, {
+              capturedImage: capturedImage,
+              selectedFilter: selectedFilter,
+              onSelectFilter: setSelectedFilter,
+            }),
+          }),
+        }),
+      _jsx(Collapse, {
+        in: openPanel === 'adjustments',
+        timeout: 'auto',
+        unmountOnExit: true,
+        sx: { position: 'absolute', bottom: '72px', width: '100%' },
+        children: _jsx(CollapsableContainer, {
+          position: 'top',
+          onCloseEvent: 'adjustmentSwipeClose',
+          children: _jsx(AdjustmentSliders, {
+            imageAdjustments: imageAdjustments,
+            onAdjustmentsChange: onAdjustmentsChange,
+          }),
+        }),
+      }),
+      _jsx(ActionButtons, {
+        onRetake: onRetake,
+        onSave: onSave,
+        showSave: showSave,
+        toggleFilters: toggleFilters,
+        showFilters: openPanel === 'filters',
+        showControls: openPanel === 'adjustments',
+        toggleControls: toggleAdjustments,
+      }),
+    ],
+  });
+};
+export default ActionBar;

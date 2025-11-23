@@ -14,6 +14,11 @@ interface ImagePreviewProps {
   selectedFilter: FilterKey;
   isFlipped: boolean;
   skipFilters?: boolean;
+  imageAdjustments: {
+    brightness: number;
+    contrast: number;
+    saturation: number;
+  };
 }
 /**
  * ImagePreview Component

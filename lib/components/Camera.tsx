@@ -1,12 +1,11 @@
 import { useRef, useState, useEffect } from 'react';
 import { Box, Collapse } from '@mui/material';
 
-import ActionButtons from './ActionButtons';
+import ActionBar from './ActionButtons';
 import AdjustmentSliders from './AdjustmentSliders';
 import CameraControls from './CameraControls';
 import CameraError from './CameraError';
 import CaptureButton from './CaptureButton';
-import FilterSelector from './FilterSelector';
 import ImagePreview from './ImagePreview';
 import CameraSwitch from './CameraSwitch';
 
@@ -15,6 +14,7 @@ import { FILTERS } from '../utils/filters';
 import { detectDevice } from '../utils/device';
 
 import type { CameraProps, FilterKey } from '../types/types';
+import CollapsableContainer from './CollapsableContainer';
 
 /**
  * Camera Component
@@ -84,9 +84,11 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
 
   // Image adjustment state
-  const [brightness, setBrightness] = useState(100);
-  const [contrast, setContrast] = useState(100);
-  const [saturation, setSaturation] = useState(100);
+  const [imageAdjustments, setImageAdjustments] = useState({
+    brightness: 100,
+    contrast: 100,
+    saturation: 100,
+  });
 
   // Capture and filter state
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
@@ -187,7 +189,7 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
 
     // Apply adjustments and flip if needed
     ctx.save();
-    ctx.filter = `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)`;
+    ctx.filter = `brightness(${imageAdjustments.brightness}%) contrast(${imageAdjustments.contrast}%) saturate(${imageAdjustments.saturation}%)`;
     if (isFlipped) {
       ctx.translate(canvas.width, 0);
       ctx.scale(-1, 1);
@@ -249,7 +251,7 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
       ctx.save();
 
       // Apply CSS filter
-      ctx.filter = filter;
+      ctx.filter = `brightness(${imageAdjustments.brightness}%) contrast(${imageAdjustments.contrast}%) saturate(${imageAdjustments.saturation}%) ${filter}`;
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       ctx.filter = 'none';
 
@@ -297,9 +299,11 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
   const handleResetState = () => {
     setCapturedImage(null);
     setSelectedFilter('none');
-    setBrightness(100);
-    setContrast(100);
-    setSaturation(100);
+    setImageAdjustments({
+      brightness: 100,
+      contrast: 100,
+      saturation: 100,
+    });
   };
 
   /**
@@ -310,6 +314,12 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
     if (onClose) {
       onClose();
     }
+  };
+
+  const setDeviceSettings = () => {
+    const { isMobile, mobileOS } = detectDevice();
+    setIsMobile(isMobile);
+    setMobileOS(mobileOS);
   };
 
   // Initialize camera on mount and when facing mode changes
@@ -324,20 +334,30 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
     };
   }, [facingMode]);
 
-  // Detect mobile device on mount
   useEffect(() => {
-    const { isMobile, mobileOS } = detectDevice();
-    setIsMobile(isMobile);
-    setMobileOS(mobileOS);
+    const updateSettings = () => {
+      setDeviceSettings();
+    };
 
+    // Initial detection
+    updateSettings();
+
+    // Watch for device-type changes (like resizing the window or toggling mobile dev tools)
+    window.addEventListener('resize', updateSettings);
+
+    // Custom event listener (already existing)
     const handleSwipeClose = () => setShowControls(false);
     window.addEventListener('adjustmentSwipeClose', handleSwipeClose);
-    return () => window.removeEventListener('adjustmentSwipeClose', handleSwipeClose);
+
+    return () => {
+      window.removeEventListener('resize', updateSettings);
+      window.removeEventListener('adjustmentSwipeClose', handleSwipeClose);
+    };
   }, []);
 
   // Styles for video preview with real-time adjustments
   const videoStyle: React.CSSProperties = {
-    filter: `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)`,
+    filter: `brightness(${imageAdjustments.brightness}%) contrast(${imageAdjustments.contrast}%) saturate(${imageAdjustments.saturation}%)`,
     height: '100%',
     left: 0,
     objectFit: 'cover',
@@ -373,15 +393,15 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
           />
 
           {/* Adjustment sliders panel */}
-          <Collapse in={showControls} timeout='auto' unmountOnExit>
-            <AdjustmentSliders
-              brightness={brightness}
-              contrast={contrast}
-              saturation={saturation}
-              onBrightnessChange={setBrightness}
-              onContrastChange={setContrast}
-              onSaturationChange={setSaturation}
-            />
+          <Collapse
+            in={showControls}
+            timeout='auto'
+            unmountOnExit
+            style={{ position: 'absolute', top: '72px', width: '100%' }}
+          >
+            <CollapsableContainer onCloseEvent='adjustmentSwipeClose'>
+              <AdjustmentSliders imageAdjustments={imageAdjustments} onAdjustmentsChange={setImageAdjustments} />
+            </CollapsableContainer>
           </Collapse>
 
           {/* Error display */}
@@ -390,12 +410,12 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
           <Box
             sx={{
               alignItems: 'center',
-              bottom: 40,
+              bottom: 20,
               display: 'flex',
               justifyContent: 'space-around',
               left: 0,
               pb: 2,
-              position: 'fixed',
+              position: 'absolute',
               right: 0,
               width: '100%',
             }}
@@ -421,29 +441,36 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
         </>
       ) : (
         /* Image Preview Mode with Filters */
-        <Box sx={{ width: '100%', height: '100%', position: 'relative', display: 'flex', flexDirection: 'column' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+            position: 'relative',
+            width: '100%',
+          }}
+        >
           {/* Captured image display */}
           <ImagePreview
             capturedImage={capturedImage}
             selectedFilter={selectedFilter}
             isFlipped={false}
             skipFilters={skipFilters}
+            imageAdjustments={imageAdjustments}
+            key={`${selectedFilter}-${imageAdjustments.brightness}-${imageAdjustments.contrast}-${imageAdjustments.saturation}`}
           />
 
-          {/* Filter selection panel */}
-          {!skipFilters && (
-            <FilterSelector
-              capturedImage={capturedImage}
-              selectedFilter={selectedFilter}
-              onSelectFilter={setSelectedFilter}
-            />
-          )}
-
           {/* Action buttons */}
-          <ActionButtons
+          <ActionBar
+            capturedImage={capturedImage}
+            selectedFilter={selectedFilter}
+            setSelectedFilter={setSelectedFilter}
+            skipFilters={skipFilters}
             onRetake={handleRetakePhoto}
             onSave={skipFilters ? undefined : handleApplyFilterAndSave}
             showSave={!skipFilters}
+            imageAdjustments={imageAdjustments}
+            onAdjustmentsChange={setImageAdjustments}
           />
         </Box>
       )}

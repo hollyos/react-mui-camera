@@ -1,17 +1,17 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from 'react/jsx-runtime';
 import { useRef, useState, useEffect } from 'react';
 import { Box, Collapse } from '@mui/material';
-import ActionButtons from './ActionButtons';
+import ActionBar from './ActionButtons';
 import AdjustmentSliders from './AdjustmentSliders';
 import CameraControls from './CameraControls';
 import CameraError from './CameraError';
 import CaptureButton from './CaptureButton';
-import FilterSelector from './FilterSelector';
 import ImagePreview from './ImagePreview';
 import CameraSwitch from './CameraSwitch';
 import { startCamera as startCameraUtil, stopCamera as stopCameraUtil } from '../utils/cameraUtils';
 import { FILTERS } from '../utils/filters';
 import { detectDevice } from '../utils/device';
+import CollapsableContainer from './CollapsableContainer';
 /**
  * Camera Component
  *
@@ -78,9 +78,11 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
   const [isStreaming, setIsStreaming] = useState(false);
   const [facingMode, setFacingMode] = useState('user');
   // Image adjustment state
-  const [brightness, setBrightness] = useState(100);
-  const [contrast, setContrast] = useState(100);
-  const [saturation, setSaturation] = useState(100);
+  const [imageAdjustments, setImageAdjustments] = useState({
+    brightness: 100,
+    contrast: 100,
+    saturation: 100,
+  });
   // Capture and filter state
   const [capturedImage, setCapturedImage] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState('none');
@@ -169,7 +171,7 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
     if (!ctx) return;
     // Apply adjustments and flip if needed
     ctx.save();
-    ctx.filter = `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)`;
+    ctx.filter = `brightness(${imageAdjustments.brightness}%) contrast(${imageAdjustments.contrast}%) saturate(${imageAdjustments.saturation}%)`;
     if (isFlipped) {
       ctx.translate(canvas.width, 0);
       ctx.scale(-1, 1);
@@ -221,7 +223,7 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.save();
       // Apply CSS filter
-      ctx.filter = filter;
+      ctx.filter = `brightness(${imageAdjustments.brightness}%) contrast(${imageAdjustments.contrast}%) saturate(${imageAdjustments.saturation}%) ${filter}`;
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       ctx.filter = 'none';
       // Apply blend mode overlay if specified
@@ -262,9 +264,11 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
   const handleResetState = () => {
     setCapturedImage(null);
     setSelectedFilter('none');
-    setBrightness(100);
-    setContrast(100);
-    setSaturation(100);
+    setImageAdjustments({
+      brightness: 100,
+      contrast: 100,
+      saturation: 100,
+    });
   };
   /**
    * Handles closing the camera interface
@@ -274,6 +278,11 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
     if (onClose) {
       onClose();
     }
+  };
+  const setDeviceSettings = () => {
+    const { isMobile, mobileOS } = detectDevice();
+    setIsMobile(isMobile);
+    setMobileOS(mobileOS);
   };
   // Initialize camera on mount and when facing mode changes
   useEffect(() => {
@@ -286,18 +295,25 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
       }
     };
   }, [facingMode]);
-  // Detect mobile device on mount
   useEffect(() => {
-    const { isMobile, mobileOS } = detectDevice();
-    setIsMobile(isMobile);
-    setMobileOS(mobileOS);
+    const updateSettings = () => {
+      setDeviceSettings();
+    };
+    // Initial detection
+    updateSettings();
+    // Watch for device-type changes (like resizing the window or toggling mobile dev tools)
+    window.addEventListener('resize', updateSettings);
+    // Custom event listener (already existing)
     const handleSwipeClose = () => setShowControls(false);
     window.addEventListener('adjustmentSwipeClose', handleSwipeClose);
-    return () => window.removeEventListener('adjustmentSwipeClose', handleSwipeClose);
+    return () => {
+      window.removeEventListener('resize', updateSettings);
+      window.removeEventListener('adjustmentSwipeClose', handleSwipeClose);
+    };
   }, []);
   // Styles for video preview with real-time adjustments
   const videoStyle = {
-    filter: `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)`,
+    filter: `brightness(${imageAdjustments.brightness}%) contrast(${imageAdjustments.contrast}%) saturate(${imageAdjustments.saturation}%)`,
     height: '100%',
     left: 0,
     objectFit: 'cover',
@@ -330,25 +346,25 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
                 in: showControls,
                 timeout: 'auto',
                 unmountOnExit: true,
-                children: _jsx(AdjustmentSliders, {
-                  brightness: brightness,
-                  contrast: contrast,
-                  saturation: saturation,
-                  onBrightnessChange: setBrightness,
-                  onContrastChange: setContrast,
-                  onSaturationChange: setSaturation,
+                style: { position: 'absolute', top: '72px', width: '100%' },
+                children: _jsx(CollapsableContainer, {
+                  onCloseEvent: 'adjustmentSwipeClose',
+                  children: _jsx(AdjustmentSliders, {
+                    imageAdjustments: imageAdjustments,
+                    onAdjustmentsChange: setImageAdjustments,
+                  }),
                 }),
               }),
               error && _jsx(CameraError, { message: error }),
               _jsxs(Box, {
                 sx: {
                   alignItems: 'center',
-                  bottom: 40,
+                  bottom: 20,
                   display: 'flex',
                   justifyContent: 'space-around',
                   left: 0,
                   pb: 2,
-                  position: 'fixed',
+                  position: 'absolute',
                   right: 0,
                   width: '100%',
                 },
@@ -372,24 +388,35 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
           })
         : /* Image Preview Mode with Filters */
           _jsxs(Box, {
-            sx: { width: '100%', height: '100%', position: 'relative', display: 'flex', flexDirection: 'column' },
+            sx: {
+              display: 'flex',
+              flexDirection: 'column',
+              height: '100%',
+              position: 'relative',
+              width: '100%',
+            },
             children: [
-              _jsx(ImagePreview, {
-                capturedImage: capturedImage,
-                selectedFilter: selectedFilter,
-                isFlipped: false,
-                skipFilters: skipFilters,
-              }),
-              !skipFilters &&
-                _jsx(FilterSelector, {
+              _jsx(
+                ImagePreview,
+                {
                   capturedImage: capturedImage,
                   selectedFilter: selectedFilter,
-                  onSelectFilter: setSelectedFilter,
-                }),
-              _jsx(ActionButtons, {
+                  isFlipped: false,
+                  skipFilters: skipFilters,
+                  imageAdjustments: imageAdjustments,
+                },
+                `${selectedFilter}-${imageAdjustments.brightness}-${imageAdjustments.contrast}-${imageAdjustments.saturation}`
+              ),
+              _jsx(ActionBar, {
+                capturedImage: capturedImage,
+                selectedFilter: selectedFilter,
+                setSelectedFilter: setSelectedFilter,
+                skipFilters: skipFilters,
                 onRetake: handleRetakePhoto,
                 onSave: skipFilters ? undefined : handleApplyFilterAndSave,
                 showSave: !skipFilters,
+                imageAdjustments: imageAdjustments,
+                onAdjustmentsChange: setImageAdjustments,
               }),
             ],
           }),

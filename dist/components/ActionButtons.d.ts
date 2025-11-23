@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 /**
  * Props for the ActionButtons component
  *
@@ -11,29 +11,28 @@ interface ActionButtonsProps {
   onRetake: () => void;
   onSave?: () => void;
   showSave?: boolean;
+  toggleFilters?: () => void;
+  showFilters?: boolean;
+  toggleControls?: () => void;
+  showControls?: boolean;
 }
-/**
- * ActionButtons Component
- *
- * Renders a fixed-position button group at the bottom center of the screen containing
- * retake and save photo actions. Typically used in camera or image editing interfaces
- * to provide users with options after capturing or editing a photo.
- *
- * The component is positioned absolutely at the bottom center using transform translations
- * and includes proper z-indexing for overlay scenarios.
- *
- * @component
- * @example
- * ```tsx
- * <ActionButtons
- *   onRetake={() => resetCamera()}
- *   onSave={() => savePhoto()}
- *   showSave={true}
- * />
- * ```
- *
- * @param {ActionButtonsProps} props - Component props
- * @returns {JSX.Element} A horizontally aligned button group with retake and optional save actions
- */
-declare const ActionButtons: React.FC<ActionButtonsProps>;
-export default ActionButtons;
+export interface ActionBarProps extends Omit<ActionButtonsProps, 'toggleFilters' | 'showFilters'> {
+  capturedImage: string;
+  selectedFilter: string;
+  setSelectedFilter: (filterKey: string) => void;
+  skipFilters: boolean;
+  imageAdjustments: {
+    brightness: number;
+    contrast: number;
+    saturation: number;
+  };
+  onAdjustmentsChange: React.Dispatch<
+    React.SetStateAction<{
+      brightness: number;
+      contrast: number;
+      saturation: number;
+    }>
+  >;
+}
+declare const ActionBar: React.FC<ActionBarProps>;
+export default ActionBar;

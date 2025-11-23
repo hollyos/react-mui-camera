@@ -20,7 +20,7 @@ import { MdOutlinePhotoCamera } from 'react-icons/md';
  * - Disabled state when camera is not streaming
  *
  * Positioning:
- * - Fixed 40px from bottom of viewport
+ * - 40px from bottom of container
  * - Horizontally centered using transform
  * - High z-index (10) to appear above video preview
  *
@@ -57,10 +57,9 @@ const CaptureButton = ({ onCapture, isStreaming, mobileOS, isMobile }) => {
       borderRadius: '50%',
       padding: '4px',
       transform: 'translateX(-50%)',
-      position: 'fixed',
-      bottom: 40,
+      position: 'absolute',
+      bottom: 0,
       left: '50%',
-      zIndex: 10,
     },
     children: _jsx(Button, {
       variant: 'contained',

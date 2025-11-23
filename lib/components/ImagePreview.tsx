@@ -17,6 +17,11 @@ interface ImagePreviewProps {
   selectedFilter: FilterKey;
   isFlipped: boolean;
   skipFilters?: boolean;
+  imageAdjustments: {
+    brightness: number;
+    contrast: number;
+    saturation: number;
+  };
 }
 
 /**
@@ -97,6 +102,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
   selectedFilter,
   isFlipped,
   skipFilters = false,
+  imageAdjustments,
 }) => {
   // Retrieve filter configuration for the selected filter
   const filterDef = FILTERS[selectedFilter];
@@ -107,11 +113,20 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
    * Applies CSS filter effects and transformations to create the visual preview.
    * In skip mode, all filters are bypassed for raw image display.
    */
+  const baseFilter = `
+    brightness(${imageAdjustments.brightness}%)
+    contrast(${imageAdjustments.contrast}%)
+    saturate(${imageAdjustments.saturation}%)
+  `;
+
   const imageStyle: React.CSSProperties = {
     // Apply CSS filter string (or 'none' if skipping)
-    filter: !skipFilters ? filterDef.filter : 'none',
+    filter: skipFilters ? baseFilter : `${baseFilter} ${filterDef.filter || ''}`,
+
     // Constrain to container while maintaining aspect ratio
     maxWidth: '100%',
+    height: 'auto',
+    width: 'auto',
     maxHeight: '100%',
     objectFit: 'contain',
     // Apply horizontal flip if enabled
@@ -126,7 +141,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        p: 2,
+        boxSizing: 'border-box',
       }}
     >
       {/* Wrapper for relative positioning of blend overlay */}

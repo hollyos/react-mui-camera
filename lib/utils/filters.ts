@@ -94,7 +94,7 @@ export const FILTERS: Record<string, FilterConfig> = {
   // ==========================================
 
   /** No filter applied - original image */
-  none: { name: 'Normal', section: 'Basic Filters', filter: 'none' },
+  none: { name: 'Normal', section: 'Basic Filters', filter: '' },
 
   /** Full grayscale - removes all color */
   grayscale: { name: 'B&W', section: 'Basic Filters', filter: 'grayscale(100%)' },

@@ -74,7 +74,7 @@ import { FILTERS } from '../utils/filters';
  * @param {ImagePreviewProps} props - Component props
  * @returns {JSX.Element} A centered image preview with applied filter effects
  */
-const ImagePreview = ({ capturedImage, selectedFilter, isFlipped, skipFilters = false }) => {
+const ImagePreview = ({ capturedImage, selectedFilter, isFlipped, skipFilters = false, imageAdjustments }) => {
   // Retrieve filter configuration for the selected filter
   const filterDef = FILTERS[selectedFilter];
   /**
@@ -83,11 +83,18 @@ const ImagePreview = ({ capturedImage, selectedFilter, isFlipped, skipFilters = 
    * Applies CSS filter effects and transformations to create the visual preview.
    * In skip mode, all filters are bypassed for raw image display.
    */
+  const baseFilter = `
+    brightness(${imageAdjustments.brightness}%)
+    contrast(${imageAdjustments.contrast}%)
+    saturate(${imageAdjustments.saturation}%)
+  `;
   const imageStyle = {
     // Apply CSS filter string (or 'none' if skipping)
-    filter: !skipFilters ? filterDef.filter : 'none',
+    filter: skipFilters ? baseFilter : `${baseFilter} ${filterDef.filter || ''}`,
     // Constrain to container while maintaining aspect ratio
     maxWidth: '100%',
+    height: 'auto',
+    width: 'auto',
     maxHeight: '100%',
     objectFit: 'contain',
     // Apply horizontal flip if enabled
@@ -100,7 +107,7 @@ const ImagePreview = ({ capturedImage, selectedFilter, isFlipped, skipFilters = 
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      p: 2,
+      boxSizing: 'border-box',
     },
     children: _jsxs(Box, {
       sx: { position: 'relative', display: 'inline-block', lineHeight: 0 },

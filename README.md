@@ -173,19 +173,6 @@ pnpm lint
 
 ---
 
-## **📤 Publishing to NPM**
-
-The library is bundled using TypeScript (`tsc`) and outputs to `dist/`.
-
-To publish:
-
-```bash
-pnpm build
-npm publish --access public
-```
-
----
-
 ## **📝 License**
 
 BSD-3-Clause © 2025 Holly Springsteen

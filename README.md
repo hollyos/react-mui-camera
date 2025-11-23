@@ -108,12 +108,12 @@ This enables:
 
 ## **🔧 Props**
 
-| Prop              | Type                      | Default           | Description                                     |
-| ----------------- | ------------------------- | ----------------- | ----------------------------------------------- |
-| `onImageCaptured` | `(image: string) => void` | —                 | Called with the final image (DataURL)           |
-| `onClose`         | `() => void`              | —                 | Called when the user closes the camera UI       |
-| `skipFilters`     | `boolean`                 | `false`           | Optional: If true, bypasses filter UI entirely  |
-| `allowedFilters`  | `AllowedFilters`          | `"Basic Filters"` | Optional: restrict filters to specific sections |
+| Prop              | Type                                              | Default | Description                                     |
+| ----------------- | ------------------------------------------------- | ------- | ----------------------------------------------- |
+| `onImageCaptured` | `(image: string) => void`                         | —       | Called with the final image (DataURL)           |
+| `onClose`         | `() => void`                                      | —       | Called when the user closes the camera UI       |
+| `skipFilters`     | `boolean`                                         | `false` | Optional: If true, bypasses filter UI entirely  |
+| `allowedFilters`  | `'all'` or `AllowedFilters` or `AllowedFilters[]` | `"all"` | Optional: restrict filters to specific sections |
 
 ---
 

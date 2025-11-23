@@ -73,12 +73,7 @@ import type { CameraProps, FilterKey } from '../types/types';
  * @param {CameraProps} props - Component props
  * @returns {JSX.Element} A full-screen camera interface with controls and preview
  */
-const Camera: React.FC<CameraProps> = ({
-  onImageCaptured,
-  onClose,
-  skipFilters = false,
-  allowedFilters = 'Basic Filters',
-}) => {
+const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters = false, allowedFilters = 'all' }) => {
   // Refs for DOM elements
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -195,6 +190,7 @@ const Camera: React.FC<CameraProps> = ({
     // Apply adjustments and flip if needed
     ctx.save();
     ctx.filter = `brightness(${imageAdjustments.brightness}%) contrast(${imageAdjustments.contrast}%) saturate(${imageAdjustments.saturation}%)`;
+
     if (isFlipped) {
       ctx.translate(canvas.width, 0);
       ctx.scale(-1, 1);
@@ -207,6 +203,13 @@ const Camera: React.FC<CameraProps> = ({
 
     // Immediately stop camera hardware for performance
     handleStopCamera();
+
+    // Reset adjustments for next capture/filter
+    setImageAdjustments({
+      brightness: 100,
+      contrast: 100,
+      saturation: 100,
+    });
 
     // In skip mode, immediately return without filter UI
     if (skipFilters) {
@@ -235,74 +238,56 @@ const Camera: React.FC<CameraProps> = ({
    * - Color fills for tinting effects
    */
   const handleApplyFilterAndSave = () => {
-    if (skipFilters) {
-      return;
-    }
+    if (skipFilters || !capturedImage) return;
 
     const canvas = canvasRef.current;
-    if (!canvas || !capturedImage) return;
+    const ctx = canvas?.getContext('2d');
+    if (!canvas || !ctx) return;
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    const { filter, filterBlendMode, filterFill, imgBlendMode, imgBackground } = filterDef;
 
     const img = new Image();
     img.onload = () => {
-      const { filter, filterBlendMode, filterFill, imgBlendMode, imgBackground } = filterDef;
+      const { width, height } = img;
+      canvas.width = width;
+      canvas.height = height;
 
-      canvas.width = img.width;
-      canvas.height = img.height;
+      ctx.clearRect(0, 0, width, height);
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.save();
-
-      // Apply CSS filter
-      ctx.filter = `brightness(${imageAdjustments.brightness}%) contrast(${imageAdjustments.contrast}%) saturate(${imageAdjustments.saturation}%) ${filter}`;
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      ctx.filter = 'none';
-
-      // Apply blend mode overlay if specified
-      // Optional: draw background color under the image
+      // Draw solid background color under everything
       if (imgBackground) {
+        ctx.globalCompositeOperation = 'source-over';
         ctx.fillStyle = imgBackground;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, width, height);
       }
 
-      // Draw filtered image with optional image blend mode
-      ctx.globalCompositeOperation = (
-        imgBlendMode === 'normal' ? 'source-over' : imgBlendMode
-      ) as GlobalCompositeOperation;
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      // Apply image with filter + image blend mode (like CSS)
+      ctx.filter = `
+        brightness(${imageAdjustments.brightness}%)
+        contrast(${imageAdjustments.contrast}%)
+        saturate(${imageAdjustments.saturation}%)
+        ${filter || ''}
+      `;
+      ctx.globalCompositeOperation = imgBlendMode === 'normal' || !imgBlendMode ? 'source-over' : imgBlendMode;
+      ctx.drawImage(img, 0, 0, width, height);
 
-      // Reset for next overlay
+      // Apply overlay fill with filterBlendMode
+      if (filterBlendMode && filterFill) {
+        ctx.globalCompositeOperation = filterBlendMode === 'normal' ? 'source-over' : filterBlendMode;
+        ctx.filter = 'none';
+        ctx.fillStyle = filterFill;
+        ctx.fillRect(0, 0, width, height);
+      }
+
+      // Reset context and export
       ctx.globalCompositeOperation = 'source-over';
       ctx.filter = 'none';
 
-      // Apply filter blend overlay if defined
-      if (filterBlendMode && filterFill) {
-        ctx.globalCompositeOperation = (
-          filterBlendMode === 'normal' ? 'source-over' : filterBlendMode
-        ) as GlobalCompositeOperation;
-        ctx.fillStyle = filterFill;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-      }
-
-      ctx.restore();
-
       const finalImage = canvas.toDataURL('image/jpeg', 0.95);
-
-      // Return image via callback or download
-      if (onImageCaptured) {
-        onImageCaptured(finalImage);
-      } else {
-        const link = document.createElement('a');
-        link.download = `photo-${Date.now()}.jpg`;
-        link.href = finalImage;
-        link.click();
-      }
-
-      // Reset state for next capture
+      onImageCaptured?.(finalImage);
       handleResetState();
     };
+
     img.src = capturedImage;
   };
 

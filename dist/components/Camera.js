@@ -182,6 +182,12 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false, allowedFilters 
     setCapturedImage(imageData);
     // Immediately stop camera hardware for performance
     handleStopCamera();
+    // Reset adjustments for next capture/filter
+    setImageAdjustments({
+      brightness: 100,
+      contrast: 100,
+      saturation: 100,
+    });
     // In skip mode, immediately return without filter UI
     if (skipFilters) {
       if (onImageCaptured) {
@@ -208,54 +214,44 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false, allowedFilters 
    * - Color fills for tinting effects
    */
   const handleApplyFilterAndSave = () => {
-    if (skipFilters) {
-      return;
-    }
+    if (skipFilters || !capturedImage) return;
     const canvas = canvasRef.current;
-    if (!canvas || !capturedImage) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    const ctx = canvas?.getContext('2d');
+    if (!canvas || !ctx) return;
+    const { filter, filterBlendMode, filterFill, imgBlendMode, imgBackground } = filterDef;
     const img = new Image();
     img.onload = () => {
-      const { filter, filterBlendMode, filterFill, imgBlendMode, imgBackground } = filterDef;
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.save();
-      // Apply CSS filter
-      ctx.filter = `brightness(${imageAdjustments.brightness}%) contrast(${imageAdjustments.contrast}%) saturate(${imageAdjustments.saturation}%) ${filter}`;
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      ctx.filter = 'none';
-      // Apply blend mode overlay if specified
-      // Optional: draw background color under the image
+      const { width, height } = img;
+      canvas.width = width;
+      canvas.height = height;
+      ctx.clearRect(0, 0, width, height);
+      // Draw solid background color under everything
       if (imgBackground) {
+        ctx.globalCompositeOperation = 'source-over';
         ctx.fillStyle = imgBackground;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, width, height);
       }
-      // Draw filtered image with optional image blend mode
-      ctx.globalCompositeOperation = imgBlendMode === 'normal' ? 'source-over' : imgBlendMode;
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      // Reset for next overlay
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.filter = 'none';
-      // Apply filter blend overlay if defined
+      // Apply image with filter + image blend mode (like CSS)
+      ctx.filter = `
+        brightness(${imageAdjustments.brightness}%)
+        contrast(${imageAdjustments.contrast}%)
+        saturate(${imageAdjustments.saturation}%)
+        ${filter || ''}
+      `;
+      ctx.globalCompositeOperation = imgBlendMode === 'normal' || !imgBlendMode ? 'source-over' : imgBlendMode;
+      ctx.drawImage(img, 0, 0, width, height);
+      // Apply overlay fill with filterBlendMode
       if (filterBlendMode && filterFill) {
         ctx.globalCompositeOperation = filterBlendMode === 'normal' ? 'source-over' : filterBlendMode;
+        ctx.filter = 'none';
         ctx.fillStyle = filterFill;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, width, height);
       }
-      ctx.restore();
+      // Reset context and export
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.filter = 'none';
       const finalImage = canvas.toDataURL('image/jpeg', 0.95);
-      // Return image via callback or download
-      if (onImageCaptured) {
-        onImageCaptured(finalImage);
-      } else {
-        const link = document.createElement('a');
-        link.download = `photo-${Date.now()}.jpg`;
-        link.href = finalImage;
-        link.click();
-      }
-      // Reset state for next capture
+      onImageCaptured?.(finalImage);
       handleResetState();
     };
     img.src = capturedImage;

@@ -1,3 +1,4 @@
+import React from 'react';
 import type { ReactNode } from 'react';
 interface CollapsableContainerProps {
   position?: 'top' | 'bottom';

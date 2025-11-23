@@ -18,7 +18,7 @@ interface AdjustmentSlidersProps {
   >;
 }
 
-const AdjustmentSliders: React.FC<AdjustmentSlidersProps> = ({ imageAdjustments, onAdjustmentsChange }) => {
+const AdjustmentSliders: React.FC<AdjustmentSlidersProps> = React.memo(({ imageAdjustments, onAdjustmentsChange }) => {
   return (
     <Box>
       {/* Brightness Slider */}
@@ -109,6 +109,6 @@ const AdjustmentSliders: React.FC<AdjustmentSlidersProps> = ({ imageAdjustments,
       </Box>
     </Box>
   );
-};
+});
 
 export default AdjustmentSliders;

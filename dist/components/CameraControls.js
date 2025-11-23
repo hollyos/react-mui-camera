@@ -1,4 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from 'react/jsx-runtime';
+import React from 'react';
 import { IconButton, Stack, Typography, Box } from '@mui/material';
 import { BsSliders } from 'react-icons/bs';
 import { MdFlip, MdClose } from 'react-icons/md';
@@ -38,7 +39,7 @@ import { MdFlip, MdClose } from 'react-icons/md';
  * @param {CameraControlsProps} props - Component props
  * @returns {JSX.Element} A header bar with camera control buttons and dynamic title
  */
-const CameraControls = ({ isFlipped, onClose, showControls, toggleControls, toggleFlip }) => {
+const CameraControls = React.memo(({ isFlipped, onClose, showControls, toggleControls, toggleFlip }) => {
   return _jsx(Box, {
     sx: {
       position: 'absolute',
@@ -87,5 +88,5 @@ const CameraControls = ({ isFlipped, onClose, showControls, toggleControls, togg
       ],
     }),
   });
-};
+});
 export default CameraControls;

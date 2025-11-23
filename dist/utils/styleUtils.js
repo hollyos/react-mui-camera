@@ -17,3 +17,5 @@ export const validCssBlendModes = new Set([
   'luminosity',
 ]);
 export const toCssBlendMode = (mode) => (validCssBlendModes.has(mode || '') ? mode : undefined);
+export const generateFilterCSS = ({ brightness, contrast, saturation }, extra = '') =>
+  `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%) ${extra}`;

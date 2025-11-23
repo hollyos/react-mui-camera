@@ -1,6 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { Box, Button } from '@mui/material';
 import { MdOutlinePhotoCamera } from 'react-icons/md';
+import { useDeviceInfo } from '../hooks/useDeviceInfo';
 
 /**
  * Props for the CaptureButton component
@@ -12,8 +13,6 @@ import { MdOutlinePhotoCamera } from 'react-icons/md';
 interface CaptureButtonProps {
   onCapture: () => void;
   isStreaming: boolean;
-  mobileOS: 'ios' | 'android' | null;
-  isMobile: boolean;
 }
 
 /**
@@ -65,7 +64,9 @@ interface CaptureButtonProps {
  * @param {CaptureButtonProps} props - Component props
  * @returns {JSX.Element} A circular button with camera icon for photo capture
  */
-const CaptureButton: React.FC<CaptureButtonProps> = ({ onCapture, isStreaming, mobileOS, isMobile }) => {
+const CaptureButton: React.FC<CaptureButtonProps> = React.memo(({ onCapture, isStreaming }) => {
+  const { isMobile, mobileOS } = useDeviceInfo();
+
   return (
     <Box
       sx={{
@@ -99,6 +100,6 @@ const CaptureButton: React.FC<CaptureButtonProps> = ({ onCapture, isStreaming, m
       </Button>
     </Box>
   );
-};
+});
 
 export default CaptureButton;

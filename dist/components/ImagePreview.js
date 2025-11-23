@@ -1,4 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from 'react/jsx-runtime';
+import React from 'react';
 import { Box } from '@mui/material';
 import { FILTERS } from '../utils/filters';
 import { toCssBlendMode } from '../utils/styleUtils';
@@ -75,75 +76,77 @@ import { toCssBlendMode } from '../utils/styleUtils';
  * @param {ImagePreviewProps} props - Component props
  * @returns {JSX.Element} A centered image preview with applied filter effects
  */
-const ImagePreview = ({ capturedImage, selectedFilter, isFlipped, skipFilters = false, imageAdjustments }) => {
-  // Retrieve filter configuration for the selected filter
-  const filterDef = FILTERS[selectedFilter];
-  /**
-   * Computed styles for the preview image
-   *
-   * Applies CSS filter effects and transformations to create the visual preview.
-   * In skip mode, all filters are bypassed for raw image display.
-   */
-  const baseFilter = `
+const ImagePreview = React.memo(
+  ({ capturedImage, selectedFilter, isFlipped, skipFilters = false, imageAdjustments }) => {
+    // Retrieve filter configuration for the selected filter
+    const filterDef = FILTERS[selectedFilter];
+    /**
+     * Computed styles for the preview image
+     *
+     * Applies CSS filter effects and transformations to create the visual preview.
+     * In skip mode, all filters are bypassed for raw image display.
+     */
+    const baseFilter = `
     brightness(${imageAdjustments.brightness}%)
     contrast(${imageAdjustments.contrast}%)
     saturate(${imageAdjustments.saturation}%)
   `;
-  return _jsx(Box, {
-    sx: {
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      boxSizing: 'border-box',
-    },
-    children: _jsxs(Box, {
-      sx: { position: 'relative', display: 'inline-block', lineHeight: 0 },
-      children: [
-        _jsx(Box, {
-          sx: {
-            alignItems: 'center',
-            background: filterDef.imgBackground || 'transparent',
-            display: 'flex',
-            height: '100%',
-            justifyContent: 'center',
-            overflow: 'hidden',
-            width: '100%',
-          },
-          children: _jsx('img', {
-            src: capturedImage,
-            alt: 'Captured',
-            style: {
-              display: 'block',
-              filter: skipFilters ? baseFilter : `${baseFilter} ${filterDef.filter || ''}`,
-              height: '100%',
-              maxHeight: '100%',
-              maxWidth: '100%',
-              mixBlendMode: toCssBlendMode(filterDef.imgBlendMode) || 'normal',
-              objectFit: 'cover',
-              transform: isFlipped ? 'scaleX(-1)' : 'none',
-              width: '100%',
-            },
-          }),
-        }),
-        !skipFilters &&
-          (filterDef.filterBlendMode || filterDef.filterFill) &&
+    return _jsx(Box, {
+      sx: {
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        boxSizing: 'border-box',
+      },
+      children: _jsxs(Box, {
+        sx: { position: 'relative', display: 'inline-block', lineHeight: 0 },
+        children: [
           _jsx(Box, {
             sx: {
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
+              alignItems: 'center',
+              background: filterDef.imgBackground || 'transparent',
+              display: 'flex',
               height: '100%',
-              background: typeof filterDef.filterFill === 'string' ? filterDef.filterFill : 'transparent',
-              mixBlendMode: filterDef.filterBlendMode || 'normal',
-              opacity: 1,
-              pointerEvents: 'none', // Allows clicks to pass through to image
+              justifyContent: 'center',
+              overflow: 'hidden',
+              width: '100%',
             },
+            children: _jsx('img', {
+              src: capturedImage,
+              alt: 'Captured',
+              style: {
+                display: 'block',
+                filter: skipFilters ? baseFilter : `${baseFilter} ${filterDef.filter || ''}`,
+                height: '100%',
+                maxHeight: '100%',
+                maxWidth: '100%',
+                mixBlendMode: toCssBlendMode(filterDef.imgBlendMode) || 'normal',
+                objectFit: 'cover',
+                transform: isFlipped ? 'scaleX(-1)' : 'none',
+                width: '100%',
+              },
+            }),
           }),
-      ],
-    }),
-  });
-};
+          !skipFilters &&
+            (filterDef.filterBlendMode || filterDef.filterFill) &&
+            _jsx(Box, {
+              sx: {
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                background: typeof filterDef.filterFill === 'string' ? filterDef.filterFill : 'transparent',
+                mixBlendMode: filterDef.filterBlendMode || 'normal',
+                opacity: 1,
+                pointerEvents: 'none', // Allows clicks to pass through to image
+              },
+            }),
+        ],
+      }),
+    });
+  }
+);
 export default ImagePreview;

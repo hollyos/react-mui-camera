@@ -1,0 +1,119 @@
+import { F as b, j as t, B as e, T as c, S as f, a as g, t as v } from './index-CsYHyd0e.js';
+const y = ({ allowedFilters: s = 'all', capturedImage: p, onSelectFilter: j, selectedFilter: m }) => {
+  const o = {};
+  return (
+    Object.entries(b).forEach(([r, a]) => {
+      const n = r,
+        i = a.section;
+      (s === 'all' || (typeof s == 'string' && s === i) || (Array.isArray(s) && s.includes(i))) &&
+        (o[i] || (o[i] = []), o[i].push([n, a]));
+    }),
+    t.jsxs(e, {
+      sx: { bgcolor: 'rgba(0,0,0,0.8)', width: '100%', p: 2 },
+      children: [
+        t.jsx(c, { variant: 'subtitle2', sx: { color: 'white', mb: 1 }, children: 'Choose Filter' }),
+        t.jsx(f, {
+          direction: 'row',
+          spacing: 0,
+          sx: { overflowX: 'auto', pb: 1 },
+          children: Object.entries(o).map(([r, a]) =>
+            t.jsxs(
+              e,
+              {
+                sx: { position: 'relative', pr: 3, mr: 3 },
+                children: [
+                  t.jsx(e, {
+                    sx: { width: '100%', mb: 1, position: 'absolute', top: 0 },
+                    children: t.jsx(c, {
+                      variant: 'overline',
+                      sx: {
+                        color: 'rgba(255,255,255,0.6)',
+                        fontSize: '0.65rem',
+                        mb: 0.5,
+                        textTransform: 'uppercase',
+                        letterSpacing: 0.5,
+                      },
+                      children: r,
+                    }),
+                  }),
+                  t.jsx(e, {
+                    sx: { display: 'flex', flexDirection: 'row', gap: 1, mt: 4 },
+                    children: a.map(
+                      ([
+                        n,
+                        { name: i, filter: l, filterBlendMode: x, filterFill: d, imgBackground: u, imgBlendMode: h },
+                      ]) =>
+                        t.jsxs(
+                          e,
+                          {
+                            sx: { display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 70 },
+                            children: [
+                              t.jsxs(g, {
+                                onClick: () => j(n),
+                                variant: m === n ? 'contained' : 'outlined',
+                                sx: {
+                                  width: 70,
+                                  height: 70,
+                                  p: 0,
+                                  borderRadius: 2,
+                                  overflow: 'hidden',
+                                  position: 'relative',
+                                },
+                                children: [
+                                  t.jsx(e, {
+                                    sx: {
+                                      alignItems: 'center',
+                                      background: u || 'transparent',
+                                      display: 'flex',
+                                      height: '100%',
+                                      justifyContent: 'center',
+                                      overflow: 'hidden',
+                                      width: '100%',
+                                    },
+                                    children: t.jsx('img', {
+                                      src: p,
+                                      alt: i,
+                                      style: {
+                                        display: 'block',
+                                        filter: l,
+                                        height: '100%',
+                                        mixBlendMode: v(h === 'normal' ? 'initial' : h) || 'initial',
+                                        objectFit: 'cover',
+                                        width: '100%',
+                                      },
+                                    }),
+                                  }),
+                                  x &&
+                                    typeof d == 'string' &&
+                                    t.jsx(e, {
+                                      sx: {
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: '100%',
+                                        height: '100%',
+                                        background: d,
+                                        mixBlendMode: x,
+                                        pointerEvents: 'none',
+                                      },
+                                    }),
+                                ],
+                              }),
+                              t.jsx(c, { variant: 'caption', sx: { color: 'white', mt: 0.5 }, children: i }),
+                            ],
+                          },
+                          n
+                        )
+                    ),
+                  }),
+                ],
+              },
+              r
+            )
+          ),
+        }),
+      ],
+    })
+  );
+};
+export { y as default };

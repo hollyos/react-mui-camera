@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { IconButton, Stack, Typography, Box } from '@mui/material';
 import { BsSliders } from 'react-icons/bs';
 import { MdFlip, MdClose } from 'react-icons/md';
@@ -59,61 +59,57 @@ interface CameraControlsProps {
  * @param {CameraControlsProps} props - Component props
  * @returns {JSX.Element} A header bar with camera control buttons and dynamic title
  */
-const CameraControls: React.FC<CameraControlsProps> = ({
-  isFlipped,
-  onClose,
-  showControls,
-  toggleControls,
-  toggleFlip,
-}) => {
-  return (
-    <Box
-      sx={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bgcolor: 'rgba(0,0,0,0.5)',
-        p: 2,
-        zIndex: 10,
-        height: 72,
-        boxSizing: 'border-box',
-      }}
-    >
-      <Stack direction='row' alignItems='center' justifyContent='space-between'>
-        {/* Left control group */}
-        <Box>
-          {/* Adjustment controls toggle button */}
-          <IconButton onClick={toggleControls} sx={{ p: 1, color: 'white' }}>
-            <BsSliders size={24} />
-          </IconButton>
+const CameraControls: React.FC<CameraControlsProps> = React.memo(
+  ({ isFlipped, onClose, showControls, toggleControls, toggleFlip }) => {
+    return (
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bgcolor: 'rgba(0,0,0,0.5)',
+          p: 2,
+          zIndex: 10,
+          height: 72,
+          boxSizing: 'border-box',
+        }}
+      >
+        <Stack direction='row' alignItems='center' justifyContent='space-between'>
+          {/* Left control group */}
+          <Box>
+            {/* Adjustment controls toggle button */}
+            <IconButton onClick={toggleControls} sx={{ p: 1, color: 'white' }}>
+              <BsSliders size={24} />
+            </IconButton>
 
-          {/* Horizontal flip toggle button */}
-          <IconButton onClick={toggleFlip} sx={{ p: 1, color: 'white' }}>
-            <MdFlip
-              size={24}
-              style={{ transition: 'transform 0.3s', transform: isFlipped ? 'scaleX(1)' : 'scaleX(-1)' }}
-            />
-          </IconButton>
-        </Box>
+            {/* Horizontal flip toggle button */}
+            <IconButton onClick={toggleFlip} sx={{ p: 1, color: 'white' }}>
+              <MdFlip
+                size={24}
+                style={{ transition: 'transform 0.3s', transform: isFlipped ? 'scaleX(1)' : 'scaleX(-1)' }}
+              />
+            </IconButton>
+          </Box>
 
-        {/* Center title - dynamically updates based on current mode */}
-        <Typography
-          variant='h6'
-          sx={{ color: 'white', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}
-        >
-          {showControls ? 'Adjustments' : 'Camera'}
-        </Typography>
+          {/* Center title - dynamically updates based on current mode */}
+          <Typography
+            variant='h6'
+            sx={{ color: 'white', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}
+          >
+            {showControls ? 'Adjustments' : 'Camera'}
+          </Typography>
 
-        {/* Right control group - close button if provided */}
-        {onClose && (
-          <IconButton onClick={onClose} sx={{ p: 1, color: 'white' }}>
-            <MdClose width={24} height={24} fill='white' />
-          </IconButton>
-        )}
-      </Stack>
-    </Box>
-  );
-};
+          {/* Right control group - close button if provided */}
+          {onClose && (
+            <IconButton onClick={onClose} sx={{ p: 1, color: 'white' }}>
+              <MdClose width={24} height={24} fill='white' />
+            </IconButton>
+          )}
+        </Stack>
+      </Box>
+    );
+  }
+);
 
 export default CameraControls;

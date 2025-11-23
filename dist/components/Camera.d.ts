@@ -1,3 +1,4 @@
+import React from 'react';
 import type { CameraProps } from '../types/types';
 /**
  * Camera Component

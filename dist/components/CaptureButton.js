@@ -1,6 +1,8 @@
 import { jsx as _jsx } from 'react/jsx-runtime';
+import React from 'react';
 import { Box, Button } from '@mui/material';
 import { MdOutlinePhotoCamera } from 'react-icons/md';
+import { useDeviceInfo } from '../hooks/useDeviceInfo';
 /**
  * CaptureButton Component
  *
@@ -50,7 +52,8 @@ import { MdOutlinePhotoCamera } from 'react-icons/md';
  * @param {CaptureButtonProps} props - Component props
  * @returns {JSX.Element} A circular button with camera icon for photo capture
  */
-const CaptureButton = ({ onCapture, isStreaming, mobileOS, isMobile }) => {
+const CaptureButton = React.memo(({ onCapture, isStreaming }) => {
+  const { isMobile, mobileOS } = useDeviceInfo();
   return _jsx(Box, {
     sx: {
       border: mobileOS === 'ios' ? '4px solid white' : 'none',
@@ -79,5 +82,5 @@ const CaptureButton = ({ onCapture, isStreaming, mobileOS, isMobile }) => {
       children: !isMobile && _jsx(MdOutlinePhotoCamera, { size: 40, fill: 'white' }),
     }),
   });
-};
+});
 export default CaptureButton;

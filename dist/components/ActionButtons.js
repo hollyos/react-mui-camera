@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from 'react/jsx-runtime';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Box, IconButton, Collapse } from '@mui/material';
-import FilterSelector from './FilterSelector';
+import LazyLoadedFilterSelector from './LazyLoadedFilterSelector';
 import AdjustmentSliders from './AdjustmentSliders';
 import CollapsableContainer from './CollapsableContainer';
 import { MdDownloading, MdClose } from 'react-icons/md';
@@ -19,7 +19,7 @@ import { RiColorFilterAiLine } from 'react-icons/ri';
  *
  * @component
  */
-const ActionButtons = ({ onRetake, onSave, showSave = true, toggleFilters, toggleControls }) => {
+const ActionButtons = React.memo(({ onRetake, onSave, showSave = true, toggleFilters, toggleControls }) => {
   return _jsxs(Box, {
     sx: {
       alignItems: 'center',
@@ -77,84 +77,86 @@ const ActionButtons = ({ onRetake, onSave, showSave = true, toggleFilters, toggl
       }),
     ],
   });
-};
-const ActionBar = ({
-  allowedFilters = 'all',
-  capturedImage,
-  imageAdjustments,
-  onAdjustmentsChange,
-  onRetake,
-  onSave,
-  selectedFilter,
-  setSelectedFilter,
-  showSave = true,
-  skipFilters,
-}) => {
-  const [openPanel, setOpenPanel] = useState(null);
-  const toggleFilters = () => {
-    setOpenPanel((prev) => (prev === 'filters' ? null : 'filters'));
-  };
-  const toggleAdjustments = () => {
-    setOpenPanel((prev) => (prev === 'adjustments' ? null : 'adjustments'));
-  };
-  useEffect(() => {
-    const handleSwipeAdjustmentClose = () => {
-      if (openPanel === 'adjustments') setOpenPanel(null);
+});
+const ActionBar = React.memo(
+  ({
+    allowedFilters = 'all',
+    capturedImage,
+    imageAdjustments,
+    onAdjustmentsChange,
+    onRetake,
+    onSave,
+    selectedFilter,
+    setSelectedFilter,
+    showSave = true,
+    skipFilters,
+  }) => {
+    const [openPanel, setOpenPanel] = useState(null);
+    const toggleFilters = () => {
+      setOpenPanel((prev) => (prev === 'filters' ? null : 'filters'));
     };
-    const handleSwipeFilterClose = () => {
-      if (openPanel === 'filters') setOpenPanel(null);
+    const toggleAdjustments = () => {
+      setOpenPanel((prev) => (prev === 'adjustments' ? null : 'adjustments'));
     };
-    window.addEventListener('adjustmentSwipeClose', handleSwipeAdjustmentClose);
-    window.addEventListener('filterSwipeClose', handleSwipeFilterClose);
-    return () => {
-      window.removeEventListener('adjustmentSwipeClose', handleSwipeAdjustmentClose);
-      window.removeEventListener('filterSwipeClose', handleSwipeFilterClose);
-    };
-  }, [openPanel]);
-  return _jsxs(Box, {
-    sx: { position: 'relative' },
-    children: [
-      !skipFilters &&
+    useEffect(() => {
+      const handleSwipeAdjustmentClose = () => {
+        if (openPanel === 'adjustments') setOpenPanel(null);
+      };
+      const handleSwipeFilterClose = () => {
+        if (openPanel === 'filters') setOpenPanel(null);
+      };
+      window.addEventListener('adjustmentSwipeClose', handleSwipeAdjustmentClose);
+      window.addEventListener('filterSwipeClose', handleSwipeFilterClose);
+      return () => {
+        window.removeEventListener('adjustmentSwipeClose', handleSwipeAdjustmentClose);
+        window.removeEventListener('filterSwipeClose', handleSwipeFilterClose);
+      };
+    }, [openPanel]);
+    return _jsxs(Box, {
+      sx: { position: 'relative' },
+      children: [
+        !skipFilters &&
+          _jsx(Collapse, {
+            in: openPanel === 'filters',
+            timeout: 'auto',
+            unmountOnExit: true,
+            sx: { position: 'absolute', bottom: '72px', width: '100%' },
+            children: _jsx(CollapsableContainer, {
+              position: 'top',
+              onCloseEvent: 'filterSwipeClose',
+              children: _jsx(LazyLoadedFilterSelector, {
+                allowedFilters: allowedFilters,
+                capturedImage: capturedImage,
+                onSelectFilter: setSelectedFilter,
+                selectedFilter: selectedFilter,
+              }),
+            }),
+          }),
         _jsx(Collapse, {
-          in: openPanel === 'filters',
+          in: openPanel === 'adjustments',
           timeout: 'auto',
           unmountOnExit: true,
           sx: { position: 'absolute', bottom: '72px', width: '100%' },
           children: _jsx(CollapsableContainer, {
             position: 'top',
-            onCloseEvent: 'filterSwipeClose',
-            children: _jsx(FilterSelector, {
-              allowedFilters: allowedFilters,
-              capturedImage: capturedImage,
-              onSelectFilter: setSelectedFilter,
-              selectedFilter: selectedFilter,
+            onCloseEvent: 'adjustmentSwipeClose',
+            children: _jsx(AdjustmentSliders, {
+              imageAdjustments: imageAdjustments,
+              onAdjustmentsChange: onAdjustmentsChange,
             }),
           }),
         }),
-      _jsx(Collapse, {
-        in: openPanel === 'adjustments',
-        timeout: 'auto',
-        unmountOnExit: true,
-        sx: { position: 'absolute', bottom: '72px', width: '100%' },
-        children: _jsx(CollapsableContainer, {
-          position: 'top',
-          onCloseEvent: 'adjustmentSwipeClose',
-          children: _jsx(AdjustmentSliders, {
-            imageAdjustments: imageAdjustments,
-            onAdjustmentsChange: onAdjustmentsChange,
-          }),
+        _jsx(ActionButtons, {
+          onRetake: onRetake,
+          onSave: onSave,
+          showSave: showSave,
+          toggleFilters: toggleFilters,
+          showFilters: openPanel === 'filters',
+          showControls: openPanel === 'adjustments',
+          toggleControls: toggleAdjustments,
         }),
-      }),
-      _jsx(ActionButtons, {
-        onRetake: onRetake,
-        onSave: onSave,
-        showSave: showSave,
-        toggleFilters: toggleFilters,
-        showFilters: openPanel === 'filters',
-        showControls: openPanel === 'adjustments',
-        toggleControls: toggleAdjustments,
-      }),
-    ],
-  });
-};
+      ],
+    });
+  }
+);
 export default ActionBar;

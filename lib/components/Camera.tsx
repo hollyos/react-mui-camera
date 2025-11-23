@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Collapse } from '@mui/material';
 
 import ActionBar from './ActionButtons';
@@ -10,11 +10,14 @@ import ImagePreview from './ImagePreview';
 import CameraSwitch from './CameraSwitch';
 import CollapsableContainer from './CollapsableContainer';
 
-import { startCamera as startCameraUtil, stopCamera as stopCameraUtil } from '../utils/cameraUtils';
+import { useCameraStream } from '../hooks/useCameraStream';
+
 import { FILTERS } from '../utils/filters';
-import { detectDevice } from '../utils/device';
+import { generateFilterCSS } from '../utils/styleUtils';
 
 import type { CameraProps, FilterKey } from '../types/types';
+
+type FacingMode = 'user' | 'environment';
 
 /**
  * Camera Component
@@ -74,14 +77,11 @@ import type { CameraProps, FilterKey } from '../types/types';
  * @returns {JSX.Element} A full-screen camera interface with controls and preview
  */
 const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters = false, allowedFilters = 'all' }) => {
-  // Refs for DOM elements
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const streamRef = useRef<MediaStream | null>(null);
+  const { videoRef, canvasRef, streamRef, isStreaming, initCamera, stopCamera } = useCameraStream();
 
   // Camera state
-  const [isStreaming, setIsStreaming] = useState(false);
-  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
+  const savedFacingMode = localStorage.getItem('facingMode') as FacingMode | null;
+  const [facingMode, setFacingMode] = useState<FacingMode>(savedFacingMode || 'user');
 
   // Image adjustment state
   const [imageAdjustments, setImageAdjustments] = useState({
@@ -99,56 +99,7 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
   const [error, setError] = useState<string>('');
   const [isFlipped, setIsFlipped] = useState(true);
 
-  // Mobile detection
-  const [isMobile, setIsMobile] = useState(false);
-  const [mobileOS, setMobileOS] = useState<'ios' | 'android' | null>(null);
-
   const filterDef = FILTERS[selectedFilter];
-
-  /**
-   * Initializes the camera stream with current settings
-   *
-   * Requests user permission and starts the camera with the specified facing mode.
-   * Sets up the video element to display the stream and handles potential errors
-   * like permission denial or hardware unavailability.
-   *
-   * @async
-   * @throws {Error} Camera access errors are caught and displayed to the user
-   */
-  const initCamera = async () => {
-    try {
-      setError('');
-      const stream = await startCameraUtil(facingMode);
-      streamRef.current = stream;
-
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        videoRef.current.onloadedmetadata = () => {
-          if (videoRef.current) {
-            videoRef.current.play();
-            setIsStreaming(true);
-          }
-        };
-      }
-    } catch (err) {
-      console.error('Camera access error:', err);
-      setError('Unable to access camera. Please check permissions.');
-    }
-  };
-
-  /**
-   * Stops the active camera stream and releases hardware
-   *
-   * Terminates all tracks in the current stream, turning off the camera indicator
-   * light and freeing resources for other applications.
-   */
-  const handleStopCamera = () => {
-    if (streamRef.current) {
-      stopCameraUtil(streamRef.current);
-      streamRef.current = null;
-      setIsStreaming(false);
-    }
-  };
 
   /**
    * Switches between front and rear cameras
@@ -157,8 +108,10 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
    * The useEffect hook monitoring facingMode handles the actual restart.
    */
   const handleSwitchCamera = () => {
-    handleStopCamera();
-    setFacingMode((prev) => (prev === 'user' ? 'environment' : 'user'));
+    stopCamera();
+    const newMode = facingMode === 'user' ? 'environment' : 'user';
+    localStorage.setItem('facingMode', newMode);
+    setFacingMode(newMode);
   };
 
   /**
@@ -189,7 +142,7 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
 
     // Apply adjustments and flip if needed
     ctx.save();
-    ctx.filter = `brightness(${imageAdjustments.brightness}%) contrast(${imageAdjustments.contrast}%) saturate(${imageAdjustments.saturation}%)`;
+    ctx.filter = generateFilterCSS(imageAdjustments);
 
     if (isFlipped) {
       ctx.translate(canvas.width, 0);
@@ -202,7 +155,7 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
     setCapturedImage(imageData);
 
     // Immediately stop camera hardware for performance
-    handleStopCamera();
+    stopCamera();
 
     // Reset adjustments for next capture/filter
     setImageAdjustments({
@@ -262,12 +215,7 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
       }
 
       // Apply image with filter + image blend mode (like CSS)
-      ctx.filter = `
-        brightness(${imageAdjustments.brightness}%)
-        contrast(${imageAdjustments.contrast}%)
-        saturate(${imageAdjustments.saturation}%)
-        ${filter || ''}
-      `;
+      ctx.filter = generateFilterCSS(imageAdjustments, filter || '');
       ctx.globalCompositeOperation = imgBlendMode === 'normal' || !imgBlendMode ? 'source-over' : imgBlendMode;
       ctx.drawImage(img, 0, 0, width, height);
 
@@ -299,7 +247,7 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
    */
   const handleRetakePhoto = () => {
     handleResetState();
-    initCamera();
+    initCamera(facingMode).catch(() => setError('Unable to access camera. Please check permissions.'));
   };
 
   /**
@@ -319,54 +267,19 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
    * Handles closing the camera interface
    */
   const handleClose = () => {
-    handleStopCamera();
-    if (onClose) {
-      onClose();
-    }
-  };
-
-  const setDeviceSettings = () => {
-    const { isMobile, mobileOS } = detectDevice();
-    setIsMobile(isMobile);
-    setMobileOS(mobileOS);
+    stopCamera();
+    onClose?.();
   };
 
   // Initialize camera on mount and when facing mode changes
   useEffect(() => {
-    initCamera();
-    return () => {
-      // Cleanup: stop camera when component unmounts or facing mode changes
-      if (streamRef.current) {
-        stopCameraUtil(streamRef.current);
-        streamRef.current = null;
-      }
-    };
+    initCamera(facingMode).catch(() => setError('Unable to access camera. Please check permissions.'));
+    return () => stopCamera();
   }, [facingMode]);
-
-  useEffect(() => {
-    const updateSettings = () => {
-      setDeviceSettings();
-    };
-
-    // Initial detection
-    updateSettings();
-
-    // Watch for device-type changes (like resizing the window or toggling mobile dev tools)
-    window.addEventListener('resize', updateSettings);
-
-    // Custom event listener (already existing)
-    const handleSwipeClose = () => setShowControls(false);
-    window.addEventListener('adjustmentSwipeClose', handleSwipeClose);
-
-    return () => {
-      window.removeEventListener('resize', updateSettings);
-      window.removeEventListener('adjustmentSwipeClose', handleSwipeClose);
-    };
-  }, []);
 
   // Styles for video preview with real-time adjustments
   const videoStyle: React.CSSProperties = {
-    filter: `brightness(${imageAdjustments.brightness}%) contrast(${imageAdjustments.contrast}%) saturate(${imageAdjustments.saturation}%)`,
+    filter: generateFilterCSS(imageAdjustments),
     height: '100%',
     left: 0,
     objectFit: 'cover',
@@ -432,20 +345,10 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
             <Box sx={{ width: 80 }} />
 
             {/* Capture button */}
-            <CaptureButton
-              onCapture={handleCapturePhoto}
-              isStreaming={isStreaming}
-              mobileOS={mobileOS}
-              isMobile={isMobile}
-            />
+            <CaptureButton onCapture={handleCapturePhoto} isStreaming={isStreaming} />
 
             {/* Camera switch button - only visible on mobile devices */}
-            <CameraSwitch
-              isMobile={isMobile}
-              mobileOS={mobileOS}
-              switchCamera={handleSwitchCamera}
-              facingMode={facingMode}
-            />
+            <CameraSwitch switchCamera={handleSwitchCamera} facingMode={facingMode} />
           </Box>
         </>
       ) : (

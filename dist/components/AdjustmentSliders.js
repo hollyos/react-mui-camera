@@ -1,8 +1,9 @@
 import { jsx as _jsx, jsxs as _jsxs } from 'react/jsx-runtime';
+import React from 'react';
 import { Box, Slider, Stack, Typography } from '@mui/material';
 import { MdOutlineWbSunny, MdContrast } from 'react-icons/md';
 import { BsDropletHalf } from 'react-icons/bs';
-const AdjustmentSliders = ({ imageAdjustments, onAdjustmentsChange }) => {
+const AdjustmentSliders = React.memo(({ imageAdjustments, onAdjustmentsChange }) => {
   return _jsxs(Box, {
     children: [
       _jsxs(Box, {
@@ -108,5 +109,5 @@ const AdjustmentSliders = ({ imageAdjustments, onAdjustmentsChange }) => {
       }),
     ],
   });
-};
+});
 export default AdjustmentSliders;

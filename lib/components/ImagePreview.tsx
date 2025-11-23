@@ -98,89 +98,85 @@ interface ImagePreviewProps {
  * @param {ImagePreviewProps} props - Component props
  * @returns {JSX.Element} A centered image preview with applied filter effects
  */
-const ImagePreview: React.FC<ImagePreviewProps> = ({
-  capturedImage,
-  selectedFilter,
-  isFlipped,
-  skipFilters = false,
-  imageAdjustments,
-}) => {
-  // Retrieve filter configuration for the selected filter
-  const filterDef = FILTERS[selectedFilter];
+const ImagePreview: React.FC<ImagePreviewProps> = React.memo(
+  ({ capturedImage, selectedFilter, isFlipped, skipFilters = false, imageAdjustments }) => {
+    // Retrieve filter configuration for the selected filter
+    const filterDef = FILTERS[selectedFilter];
 
-  /**
-   * Computed styles for the preview image
-   *
-   * Applies CSS filter effects and transformations to create the visual preview.
-   * In skip mode, all filters are bypassed for raw image display.
-   */
-  const baseFilter = `
+    /**
+     * Computed styles for the preview image
+     *
+     * Applies CSS filter effects and transformations to create the visual preview.
+     * In skip mode, all filters are bypassed for raw image display.
+     */
+    const baseFilter = `
     brightness(${imageAdjustments.brightness}%)
     contrast(${imageAdjustments.contrast}%)
     saturate(${imageAdjustments.saturation}%)
   `;
 
-  return (
-    <Box
-      sx={{
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        boxSizing: 'border-box',
-      }}
-    >
-      {/* Wrapper for relative positioning of blend overlay */}
-      <Box sx={{ position: 'relative', display: 'inline-block', lineHeight: 0 }}>
-        {/* Main filtered image */}
-        <Box
-          sx={{
-            alignItems: 'center',
-            background: filterDef.imgBackground || 'transparent',
-            display: 'flex',
-            height: '100%',
-            justifyContent: 'center',
-            overflow: 'hidden',
-            width: '100%',
-          }}
-        >
-          <img
-            src={capturedImage}
-            alt='Captured'
-            style={{
-              display: 'block',
-              filter: skipFilters ? baseFilter : `${baseFilter} ${filterDef.filter || ''}`,
-              height: '100%',
-              maxHeight: '100%',
-              maxWidth: '100%',
-              mixBlendMode: toCssBlendMode(filterDef.imgBlendMode) || 'normal',
-              objectFit: 'cover',
-              transform: isFlipped ? 'scaleX(-1)' : 'none',
-              width: '100%',
-            }}
-          />
-        </Box>
-
-        {/* Blend mode overlay - only rendered for applicable complex filters */}
-        {!skipFilters && (filterDef.filterBlendMode || filterDef.filterFill) && (
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxSizing: 'border-box',
+        }}
+      >
+        {/* Wrapper for relative positioning of blend overlay */}
+        <Box sx={{ position: 'relative', display: 'inline-block', lineHeight: 0 }}>
+          {/* Main filtered image */}
           <Box
             sx={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
+              alignItems: 'center',
+              background: filterDef.imgBackground || 'transparent',
+              display: 'flex',
               height: '100%',
-              background: typeof filterDef.filterFill === 'string' ? filterDef.filterFill : 'transparent',
-              mixBlendMode: filterDef.filterBlendMode || 'normal',
-              opacity: 1,
-              pointerEvents: 'none', // Allows clicks to pass through to image
+              justifyContent: 'center',
+              overflow: 'hidden',
+              width: '100%',
             }}
-          />
-        )}
+          >
+            <img
+              src={capturedImage}
+              alt='Captured'
+              style={{
+                display: 'block',
+                filter: skipFilters ? baseFilter : `${baseFilter} ${filterDef.filter || ''}`,
+                height: '100%',
+                maxHeight: '100%',
+                maxWidth: '100%',
+                mixBlendMode: toCssBlendMode(filterDef.imgBlendMode) || 'normal',
+                objectFit: 'cover',
+                transform: isFlipped ? 'scaleX(-1)' : 'none',
+                width: '100%',
+              }}
+            />
+          </Box>
+
+          {/* Blend mode overlay - only rendered for applicable complex filters */}
+          {!skipFilters && (filterDef.filterBlendMode || filterDef.filterFill) && (
+            <Box
+              sx={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                background: typeof filterDef.filterFill === 'string' ? filterDef.filterFill : 'transparent',
+                mixBlendMode: filterDef.filterBlendMode || 'normal',
+                opacity: 1,
+                pointerEvents: 'none', // Allows clicks to pass through to image
+              }}
+            />
+          )}
+        </Box>
       </Box>
-    </Box>
-  );
-};
+    );
+  }
+);
 
 export default ImagePreview;

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Box, Typography } from '@mui/material';
 
 /**
@@ -42,7 +42,7 @@ interface CameraErrorProps {
  * @param {CameraErrorProps} props - Component props
  * @returns {JSX.Element} A centered error message box with red background
  */
-const CameraError: React.FC<CameraErrorProps> = ({ message }) => {
+const CameraError: React.FC<CameraErrorProps> = React.memo(({ message }) => {
   return (
     <Box
       sx={{
@@ -61,6 +61,6 @@ const CameraError: React.FC<CameraErrorProps> = ({ message }) => {
       <Typography>{message}</Typography>
     </Box>
   );
-};
+});
 
 export default CameraError;

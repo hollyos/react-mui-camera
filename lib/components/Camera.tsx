@@ -93,7 +93,7 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
   // UI state
   const [showControls, setShowControls] = useState(false);
   const [error, setError] = useState<string>('');
-  const [isFlipped, setIsFlipped] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(true);
 
   // Mobile detection
   const [isMobile, setIsMobile] = useState(false);
@@ -332,10 +332,13 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
   // Styles for video preview with real-time adjustments
   const videoStyle: React.CSSProperties = {
     filter: `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)`,
-    width: '100%',
     height: '100%',
+    left: 0,
     objectFit: 'cover',
+    position: 'absolute',
+    top: 0,
     transform: isFlipped ? 'scaleX(-1)' : 'none',
+    width: '100%',
   };
 
   return (
@@ -352,7 +355,7 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
       {!capturedImage || skipFilters ? (
         <>
           {/* Live video stream */}
-          <video ref={videoRef} autoPlay playsInline muted style={videoStyle} className='absolute inset-0' />
+          <video ref={videoRef} autoPlay playsInline muted style={videoStyle} />
 
           {/* Top control bar */}
           <CameraControls
@@ -386,7 +389,7 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
         </>
       ) : (
         /* Image Preview Mode with Filters */
-        <>
+        <Box sx={{ width: '100%', height: '100%', position: 'relative', display: 'flex', flexDirection: 'column' }}>
           {/* Captured image display */}
           <ImagePreview
             capturedImage={capturedImage}
@@ -410,7 +413,7 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
             onSave={skipFilters ? undefined : handleApplyFilterAndSave}
             showSave={!skipFilters}
           />
-        </>
+        </Box>
       )}
 
       {/* Hidden canvas for image processing */}

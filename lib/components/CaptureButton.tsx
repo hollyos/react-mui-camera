@@ -80,7 +80,7 @@ const CaptureButton: React.FC<CaptureButtonProps> = ({ onCapture, isStreaming })
         disabled={!isStreaming}
         sx={{ width: 80, height: 80, borderRadius: '50%', p: 0, minWidth: 0 }}
       >
-        <MdOutlinePhotoCamera width={40} height={40} fill='black' />
+        <MdOutlinePhotoCamera size={40} fill='white' />
       </Button>
     </Box>
   );

@@ -163,7 +163,11 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ capturedImage, selected
                     }}
                   >
                     {/* Base filtered image */}
-                    <img src={capturedImage} alt={name} className='w-full h-full object-cover' style={{ filter }} />
+                    <img
+                      src={capturedImage}
+                      alt={name}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', filter }}
+                    />
                     {/* Blend mode overlay for complex filters */}
                     {blendMode && typeof fill === 'string' && (
                       <Box

@@ -67,7 +67,19 @@ const CameraControls: React.FC<CameraControlsProps> = ({
   toggleFlip,
 }) => {
   return (
-    <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bgcolor: 'rgba(0,0,0,0.5)', p: 2, zIndex: 10 }}>
+    <Box
+      sx={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bgcolor: 'rgba(0,0,0,0.5)',
+        p: 2,
+        zIndex: 10,
+        height: 72,
+        boxSizing: 'border-box',
+      }}
+    >
       <Stack direction='row' alignItems='center' justifyContent='space-between'>
         {/* Left control group */}
         <Box>
@@ -80,7 +92,7 @@ const CameraControls: React.FC<CameraControlsProps> = ({
           <IconButton onClick={toggleFlip} sx={{ p: 1, color: 'white' }}>
             <MdFlip
               size={24}
-              style={{ transition: 'transform 0.3s', transform: isFlipped ? 'rotate(180deg)' : 'rotate(0deg)' }}
+              style={{ transition: 'transform 0.3s', transform: isFlipped ? 'scaleX(1)' : 'scaleX(-1)' }}
             />
           </IconButton>
         </Box>

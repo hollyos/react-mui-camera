@@ -1,6 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from 'react/jsx-runtime';
 import { useRef, useState, useEffect } from 'react';
-import { Box } from '@mui/material';
+import { Box, Collapse } from '@mui/material';
 import ActionButtons from './ActionButtons';
 import AdjustmentSliders from './AdjustmentSliders';
 import CameraControls from './CameraControls';
@@ -291,6 +291,9 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
     const { isMobile, mobileOS } = detectDevice();
     setIsMobile(isMobile);
     setMobileOS(mobileOS);
+    const handleSwipeClose = () => setShowControls(false);
+    window.addEventListener('adjustmentSwipeClose', handleSwipeClose);
+    return () => window.removeEventListener('adjustmentSwipeClose', handleSwipeClose);
   }, []);
   // Styles for video preview with real-time adjustments
   const videoStyle = {
@@ -323,8 +326,11 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
                 toggleFlip: () => setIsFlipped((prev) => !prev),
                 onClose: onClose ? handleClose : undefined,
               }),
-              showControls &&
-                _jsx(AdjustmentSliders, {
+              _jsx(Collapse, {
+                in: showControls,
+                timeout: 'auto',
+                unmountOnExit: true,
+                children: _jsx(AdjustmentSliders, {
                   brightness: brightness,
                   contrast: contrast,
                   saturation: saturation,
@@ -332,6 +338,7 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
                   onContrastChange: setContrast,
                   onSaturationChange: setSaturation,
                 }),
+              }),
               error && _jsx(CameraError, { message: error }),
               _jsxs(Box, {
                 sx: {

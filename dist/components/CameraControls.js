@@ -40,7 +40,17 @@ import { MdFlip, MdClose } from 'react-icons/md';
  */
 const CameraControls = ({ isFlipped, onClose, showControls, toggleControls, toggleFlip }) => {
   return _jsx(Box, {
-    sx: { position: 'absolute', top: 0, left: 0, right: 0, bgcolor: 'rgba(0,0,0,0.5)', p: 2, zIndex: 10 },
+    sx: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bgcolor: 'rgba(0,0,0,0.5)',
+      p: 2,
+      zIndex: 10,
+      height: 72,
+      boxSizing: 'border-box',
+    },
     children: _jsxs(Stack, {
       direction: 'row',
       alignItems: 'center',
@@ -58,7 +68,7 @@ const CameraControls = ({ isFlipped, onClose, showControls, toggleControls, togg
               sx: { p: 1, color: 'white' },
               children: _jsx(MdFlip, {
                 size: 24,
-                style: { transition: 'transform 0.3s', transform: isFlipped ? 'rotate(180deg)' : 'rotate(0deg)' },
+                style: { transition: 'transform 0.3s', transform: isFlipped ? 'scaleX(1)' : 'scaleX(-1)' },
               }),
             }),
           ],

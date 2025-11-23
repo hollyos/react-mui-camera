@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { Box } from '@mui/material';
+import { Box, SwipeableDrawer, Collapse } from '@mui/material';
 
 import ActionButtons from './ActionButtons';
 import AdjustmentSliders from './AdjustmentSliders';
@@ -328,6 +328,10 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
     const { isMobile, mobileOS } = detectDevice();
     setIsMobile(isMobile);
     setMobileOS(mobileOS);
+
+    const handleSwipeClose = () => setShowControls(false);
+    window.addEventListener('adjustmentSwipeClose', handleSwipeClose);
+    return () => window.removeEventListener('adjustmentSwipeClose', handleSwipeClose);
   }, []);
 
   // Styles for video preview with real-time adjustments
@@ -368,7 +372,7 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
           />
 
           {/* Adjustment sliders panel */}
-          {showControls && (
+          <Collapse in={showControls} timeout='auto' unmountOnExit>
             <AdjustmentSliders
               brightness={brightness}
               contrast={contrast}
@@ -377,7 +381,7 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
               onContrastChange={setContrast}
               onSaturationChange={setSaturation}
             />
-          )}
+          </Collapse>
 
           {/* Error display */}
           {error && <CameraError message={error} />}

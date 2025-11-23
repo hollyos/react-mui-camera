@@ -1,4 +1,3 @@
-import * as React from 'react';
 /**
  * Props for the AdjustmentSliders component
  *

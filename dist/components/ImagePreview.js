@@ -1,6 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from 'react/jsx-runtime';
 import { Box } from '@mui/material';
 import { FILTERS } from '../utils/filters';
+import { toCssBlendMode } from '../utils/styleUtils';
 /**
  * ImagePreview Component
  *
@@ -88,18 +89,6 @@ const ImagePreview = ({ capturedImage, selectedFilter, isFlipped, skipFilters = 
     contrast(${imageAdjustments.contrast}%)
     saturate(${imageAdjustments.saturation}%)
   `;
-  const imageStyle = {
-    // Apply CSS filter string (or 'none' if skipping)
-    filter: skipFilters ? baseFilter : `${baseFilter} ${filterDef.filter || ''}`,
-    // Constrain to container while maintaining aspect ratio
-    maxWidth: '100%',
-    height: 'auto',
-    width: 'auto',
-    maxHeight: '100%',
-    objectFit: 'contain',
-    // Apply horizontal flip if enabled
-    transform: isFlipped ? 'scaleX(-1)' : 'none',
-  };
   return _jsx(Box, {
     sx: {
       width: '100%',
@@ -112,9 +101,34 @@ const ImagePreview = ({ capturedImage, selectedFilter, isFlipped, skipFilters = 
     children: _jsxs(Box, {
       sx: { position: 'relative', display: 'inline-block', lineHeight: 0 },
       children: [
-        _jsx('img', { src: capturedImage, alt: 'Captured', style: imageStyle }),
+        _jsx(Box, {
+          sx: {
+            alignItems: 'center',
+            background: filterDef.imgBackground || 'transparent',
+            display: 'flex',
+            height: '100%',
+            justifyContent: 'center',
+            overflow: 'hidden',
+            width: '100%',
+          },
+          children: _jsx('img', {
+            src: capturedImage,
+            alt: 'Captured',
+            style: {
+              display: 'block',
+              filter: skipFilters ? baseFilter : `${baseFilter} ${filterDef.filter || ''}`,
+              height: '100%',
+              maxHeight: '100%',
+              maxWidth: '100%',
+              mixBlendMode: toCssBlendMode(filterDef.imgBlendMode) || 'normal',
+              objectFit: 'cover',
+              transform: isFlipped ? 'scaleX(-1)' : 'none',
+              width: '100%',
+            },
+          }),
+        }),
         !skipFilters &&
-          (filterDef.blendMode || filterDef.fill) &&
+          (filterDef.filterBlendMode || filterDef.filterFill) &&
           _jsx(Box, {
             sx: {
               position: 'absolute',
@@ -122,8 +136,8 @@ const ImagePreview = ({ capturedImage, selectedFilter, isFlipped, skipFilters = 
               left: 0,
               width: '100%',
               height: '100%',
-              background: typeof filterDef.fill === 'string' ? filterDef.fill : 'transparent',
-              mixBlendMode: filterDef.blendMode || 'normal',
+              background: typeof filterDef.filterFill === 'string' ? filterDef.filterFill : 'transparent',
+              mixBlendMode: filterDef.filterBlendMode || 'normal',
               opacity: 1,
               pointerEvents: 'none', // Allows clicks to pass through to image
             },

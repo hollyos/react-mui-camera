@@ -1,6 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from 'react/jsx-runtime';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { FILTERS } from '../utils/filters';
+import { toCssBlendMode } from '../utils/styleUtils';
 /**
  * FilterSelector Component
  *
@@ -69,7 +70,7 @@ import { FILTERS } from '../utils/filters';
  * @param {FilterSelectorProps} props - Component props
  * @returns {JSX.Element} A scrollable panel with categorized filter thumbnails
  */
-const FilterSelector = ({ capturedImage, selectedFilter, onSelectFilter }) => {
+const FilterSelector = ({ allowedFilters = 'all', capturedImage, onSelectFilter, selectedFilter }) => {
   /**
    * Groups filters by their section category
    *
@@ -82,10 +83,17 @@ const FilterSelector = ({ capturedImage, selectedFilter, onSelectFilter }) => {
   const filtersBySection = {};
   Object.entries(FILTERS).forEach(([key, config]) => {
     const k = key;
-    if (!filtersBySection[config.section]) {
-      filtersBySection[config.section] = [];
+    const section = config.section;
+    // Determine if this section is allowed
+    const isAllowed =
+      allowedFilters === 'all' ||
+      (typeof allowedFilters === 'string' && allowedFilters === section) ||
+      (Array.isArray(allowedFilters) && allowedFilters.includes(section));
+    if (!isAllowed) return;
+    if (!filtersBySection[section]) {
+      filtersBySection[section] = [];
     }
-    filtersBySection[config.section].push([k, config]);
+    filtersBySection[section].push([k, config]);
   });
   return _jsxs(Box, {
     sx: {
@@ -121,50 +129,71 @@ const FilterSelector = ({ capturedImage, selectedFilter, onSelectFilter }) => {
                 }),
                 _jsx(Box, {
                   sx: { display: 'flex', flexDirection: 'row', gap: 1, mt: 4 },
-                  children: filters.map(([key, { name, filter, blendMode, fill }]) =>
-                    _jsxs(
-                      Box,
-                      {
-                        sx: { display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 70 },
-                        children: [
-                          _jsxs(Button, {
-                            onClick: () => onSelectFilter(key),
-                            variant: selectedFilter === key ? 'contained' : 'outlined',
-                            sx: {
-                              width: 70,
-                              height: 70,
-                              p: 0,
-                              borderRadius: 2,
-                              overflow: 'hidden',
-                              position: 'relative',
-                            },
-                            children: [
-                              _jsx('img', {
-                                src: capturedImage,
-                                alt: name,
-                                style: { width: '100%', height: '100%', objectFit: 'cover', filter },
-                              }),
-                              blendMode &&
-                                typeof fill === 'string' &&
+                  children: filters.map(
+                    ([key, { name, filter, filterBlendMode, filterFill, imgBackground, imgBlendMode }]) =>
+                      _jsxs(
+                        Box,
+                        {
+                          sx: { display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 70 },
+                          children: [
+                            _jsxs(Button, {
+                              onClick: () => onSelectFilter(key),
+                              variant: selectedFilter === key ? 'contained' : 'outlined',
+                              sx: {
+                                width: 70,
+                                height: 70,
+                                p: 0,
+                                borderRadius: 2,
+                                overflow: 'hidden',
+                                position: 'relative',
+                              },
+                              children: [
                                 _jsx(Box, {
                                   sx: {
-                                    position: 'absolute',
-                                    top: 0,
-                                    left: 0,
-                                    width: '100%',
+                                    alignItems: 'center',
+                                    background: imgBackground || 'transparent',
+                                    display: 'flex',
                                     height: '100%',
-                                    background: fill,
-                                    mixBlendMode: blendMode,
-                                    pointerEvents: 'none',
+                                    justifyContent: 'center',
+                                    overflow: 'hidden',
+                                    width: '100%',
                                   },
+                                  children: _jsx('img', {
+                                    src: capturedImage,
+                                    alt: name,
+                                    style: {
+                                      display: 'block',
+                                      filter,
+                                      height: '100%',
+                                      mixBlendMode:
+                                        toCssBlendMode(imgBlendMode === 'normal' ? 'initial' : imgBlendMode) ||
+                                        'initial',
+                                      objectFit: 'cover',
+                                      width: '100%',
+                                    },
+                                  }),
                                 }),
-                            ],
-                          }),
-                          _jsx(Typography, { variant: 'caption', sx: { color: 'white', mt: 0.5 }, children: name }),
-                        ],
-                      },
-                      key
-                    )
+                                filterBlendMode &&
+                                  typeof filterFill === 'string' &&
+                                  _jsx(Box, {
+                                    sx: {
+                                      position: 'absolute',
+                                      top: 0,
+                                      left: 0,
+                                      width: '100%',
+                                      height: '100%',
+                                      background: filterFill,
+                                      mixBlendMode: filterBlendMode,
+                                      pointerEvents: 'none',
+                                    },
+                                  }),
+                              ],
+                            }),
+                            _jsx(Typography, { variant: 'caption', sx: { color: 'white', mt: 0.5 }, children: name }),
+                          ],
+                        },
+                        key
+                      )
                   ),
                 }),
               ],

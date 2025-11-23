@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
+
 import { Button, Box, IconButton, Collapse } from '@mui/material';
-import { MdDownloading, MdClose } from 'react-icons/md';
-import { BsSliders } from 'react-icons/bs';
-import { RiColorFilterAiLine } from 'react-icons/ri';
 import FilterSelector from './FilterSelector';
 import AdjustmentSliders from './AdjustmentSliders';
 import CollapsableContainer from './CollapsableContainer';
+
+import { MdDownloading, MdClose } from 'react-icons/md';
+import { BsSliders } from 'react-icons/bs';
+import { RiColorFilterAiLine } from 'react-icons/ri';
+
+import type { AllowedFilters } from '../types/types';
 
 /**
  * Props for the ActionButtons component
@@ -103,6 +107,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
 };
 
 export interface ActionBarProps extends Omit<ActionButtonsProps, 'toggleFilters' | 'showFilters'> {
+  allowedFilters?: AllowedFilters;
   capturedImage: string;
   selectedFilter: string;
   setSelectedFilter: (filterKey: string) => void;
@@ -122,15 +127,16 @@ export interface ActionBarProps extends Omit<ActionButtonsProps, 'toggleFilters'
 }
 
 const ActionBar: React.FC<ActionBarProps> = ({
+  allowedFilters = 'all',
   capturedImage,
+  imageAdjustments,
+  onAdjustmentsChange,
   onRetake,
   onSave,
   selectedFilter,
   setSelectedFilter,
   showSave = true,
   skipFilters,
-  imageAdjustments,
-  onAdjustmentsChange,
 }) => {
   const [openPanel, setOpenPanel] = useState<'filters' | 'adjustments' | null>(null);
 
@@ -171,9 +177,10 @@ const ActionBar: React.FC<ActionBarProps> = ({
         >
           <CollapsableContainer position='top' onCloseEvent='filterSwipeClose'>
             <FilterSelector
+              allowedFilters={allowedFilters}
               capturedImage={capturedImage}
-              selectedFilter={selectedFilter}
               onSelectFilter={setSelectedFilter}
+              selectedFilter={selectedFilter}
             />
           </CollapsableContainer>
         </Collapse>

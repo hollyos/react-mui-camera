@@ -1,12 +1,12 @@
 import { jsx as _jsx, jsxs as _jsxs } from 'react/jsx-runtime';
 import { useEffect, useState } from 'react';
 import { Button, Box, IconButton, Collapse } from '@mui/material';
-import { MdDownloading, MdClose } from 'react-icons/md';
-import { BsSliders } from 'react-icons/bs';
-import { RiColorFilterAiLine } from 'react-icons/ri';
 import FilterSelector from './FilterSelector';
 import AdjustmentSliders from './AdjustmentSliders';
 import CollapsableContainer from './CollapsableContainer';
+import { MdDownloading, MdClose } from 'react-icons/md';
+import { BsSliders } from 'react-icons/bs';
+import { RiColorFilterAiLine } from 'react-icons/ri';
 /**
  * ActionButtons Component
  *
@@ -79,15 +79,16 @@ const ActionButtons = ({ onRetake, onSave, showSave = true, toggleFilters, toggl
   });
 };
 const ActionBar = ({
+  allowedFilters = 'all',
   capturedImage,
+  imageAdjustments,
+  onAdjustmentsChange,
   onRetake,
   onSave,
   selectedFilter,
   setSelectedFilter,
   showSave = true,
   skipFilters,
-  imageAdjustments,
-  onAdjustmentsChange,
 }) => {
   const [openPanel, setOpenPanel] = useState(null);
   const toggleFilters = () => {
@@ -123,9 +124,10 @@ const ActionBar = ({
             position: 'top',
             onCloseEvent: 'filterSwipeClose',
             children: _jsx(FilterSelector, {
+              allowedFilters: allowedFilters,
               capturedImage: capturedImage,
-              selectedFilter: selectedFilter,
               onSelectFilter: setSelectedFilter,
+              selectedFilter: selectedFilter,
             }),
           }),
         }),

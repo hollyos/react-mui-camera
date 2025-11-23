@@ -1,5 +1,5 @@
 import React from 'react';
-import type { FilterKey } from '../types/types';
+import type { FilterKey, AllowedFilters } from '../types/types';
 /**
  * Props for the FilterSelector component
  *
@@ -12,9 +12,10 @@ import type { FilterKey } from '../types/types';
  *   Receives the key of the newly selected filter
  */
 interface FilterSelectorProps {
+  allowedFilters?: AllowedFilters;
   capturedImage: string;
-  selectedFilter: FilterKey;
   onSelectFilter: (filterKey: FilterKey) => void;
+  selectedFilter: FilterKey;
 }
 /**
  * FilterSelector Component

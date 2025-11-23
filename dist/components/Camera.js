@@ -8,10 +8,10 @@ import CameraError from './CameraError';
 import CaptureButton from './CaptureButton';
 import ImagePreview from './ImagePreview';
 import CameraSwitch from './CameraSwitch';
+import CollapsableContainer from './CollapsableContainer';
 import { startCamera as startCameraUtil, stopCamera as stopCameraUtil } from '../utils/cameraUtils';
 import { FILTERS } from '../utils/filters';
 import { detectDevice } from '../utils/device';
-import CollapsableContainer from './CollapsableContainer';
 /**
  * Camera Component
  *
@@ -69,7 +69,7 @@ import CollapsableContainer from './CollapsableContainer';
  * @param {CameraProps} props - Component props
  * @returns {JSX.Element} A full-screen camera interface with controls and preview
  */
-const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
+const Camera = ({ onImageCaptured, onClose, skipFilters = false, allowedFilters = 'Basic Filters' }) => {
   // Refs for DOM elements
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -217,7 +217,7 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
     if (!ctx) return;
     const img = new Image();
     img.onload = () => {
-      const { filter, blendMode, fill } = filterDef;
+      const { filter, filterBlendMode, filterFill, imgBlendMode, imgBackground } = filterDef;
       canvas.width = img.width;
       canvas.height = img.height;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -227,9 +227,21 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       ctx.filter = 'none';
       // Apply blend mode overlay if specified
-      if (blendMode && fill) {
-        ctx.globalCompositeOperation = blendMode;
-        ctx.fillStyle = typeof fill === 'string' ? fill : '#000';
+      // Optional: draw background color under the image
+      if (imgBackground) {
+        ctx.fillStyle = imgBackground;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+      // Draw filtered image with optional image blend mode
+      ctx.globalCompositeOperation = imgBlendMode === 'normal' ? 'source-over' : imgBlendMode;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      // Reset for next overlay
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.filter = 'none';
+      // Apply filter blend overlay if defined
+      if (filterBlendMode && filterFill) {
+        ctx.globalCompositeOperation = filterBlendMode === 'normal' ? 'source-over' : filterBlendMode;
+        ctx.fillStyle = filterFill;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
       ctx.restore();
@@ -400,23 +412,24 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
                 ImagePreview,
                 {
                   capturedImage: capturedImage,
-                  selectedFilter: selectedFilter,
-                  isFlipped: false,
-                  skipFilters: skipFilters,
                   imageAdjustments: imageAdjustments,
+                  isFlipped: false,
+                  selectedFilter: selectedFilter,
+                  skipFilters: skipFilters,
                 },
                 `${selectedFilter}-${imageAdjustments.brightness}-${imageAdjustments.contrast}-${imageAdjustments.saturation}`
               ),
               _jsx(ActionBar, {
+                allowedFilters: allowedFilters,
                 capturedImage: capturedImage,
-                selectedFilter: selectedFilter,
-                setSelectedFilter: setSelectedFilter,
-                skipFilters: skipFilters,
-                onRetake: handleRetakePhoto,
-                onSave: skipFilters ? undefined : handleApplyFilterAndSave,
-                showSave: !skipFilters,
                 imageAdjustments: imageAdjustments,
                 onAdjustmentsChange: setImageAdjustments,
+                onRetake: handleRetakePhoto,
+                onSave: skipFilters ? undefined : handleApplyFilterAndSave,
+                selectedFilter: selectedFilter,
+                setSelectedFilter: setSelectedFilter,
+                showSave: !skipFilters,
+                skipFilters: skipFilters,
               }),
             ],
           }),

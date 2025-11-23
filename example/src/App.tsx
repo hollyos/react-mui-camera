@@ -28,7 +28,12 @@ export default function App() {
       <Container sx={{ flexGrow: 1, py: 2 }}>
         {isStreaming ? (
           <Paper sx={{ width: '100%', height: '100%', overflow: 'hidden', position: 'relative' }}>
-            <Camera onImageCaptured={handleSave} onClose={() => setIsStreaming(false)} skipFilters={skipFilters} />
+            <Camera
+              onImageCaptured={handleSave}
+              onClose={() => setIsStreaming(false)}
+              skipFilters={skipFilters}
+              allowedFilters='all'
+            />
           </Paper>
         ) : (
           <Box sx={{ textAlign: 'center' }}>

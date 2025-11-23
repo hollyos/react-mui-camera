@@ -1,4 +1,5 @@
 import React from 'react';
+import type { AllowedFilters } from '../types/types';
 /**
  * Props for the ActionButtons component
  *
@@ -17,6 +18,7 @@ interface ActionButtonsProps {
   showControls?: boolean;
 }
 export interface ActionBarProps extends Omit<ActionButtonsProps, 'toggleFilters' | 'showFilters'> {
+  allowedFilters?: AllowedFilters;
   capturedImage: string;
   selectedFilter: string;
   setSelectedFilter: (filterKey: string) => void;

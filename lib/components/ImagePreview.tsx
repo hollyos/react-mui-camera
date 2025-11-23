@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import { FILTERS } from '../utils/filters';
+import { toCssBlendMode } from '../utils/styleUtils';
 import type { FilterKey } from '../types/types';
 
 /**
@@ -119,20 +120,6 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
     saturate(${imageAdjustments.saturation}%)
   `;
 
-  const imageStyle: React.CSSProperties = {
-    // Apply CSS filter string (or 'none' if skipping)
-    filter: skipFilters ? baseFilter : `${baseFilter} ${filterDef.filter || ''}`,
-
-    // Constrain to container while maintaining aspect ratio
-    maxWidth: '100%',
-    height: 'auto',
-    width: 'auto',
-    maxHeight: '100%',
-    objectFit: 'contain',
-    // Apply horizontal flip if enabled
-    transform: isFlipped ? 'scaleX(-1)' : 'none',
-  };
-
   return (
     <Box
       sx={{
@@ -147,10 +134,36 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
       {/* Wrapper for relative positioning of blend overlay */}
       <Box sx={{ position: 'relative', display: 'inline-block', lineHeight: 0 }}>
         {/* Main filtered image */}
-        <img src={capturedImage} alt='Captured' style={imageStyle} />
+        <Box
+          sx={{
+            alignItems: 'center',
+            background: filterDef.imgBackground || 'transparent',
+            display: 'flex',
+            height: '100%',
+            justifyContent: 'center',
+            overflow: 'hidden',
+            width: '100%',
+          }}
+        >
+          <img
+            src={capturedImage}
+            alt='Captured'
+            style={{
+              display: 'block',
+              filter: skipFilters ? baseFilter : `${baseFilter} ${filterDef.filter || ''}`,
+              height: '100%',
+              maxHeight: '100%',
+              maxWidth: '100%',
+              mixBlendMode: toCssBlendMode(filterDef.imgBlendMode) || 'normal',
+              objectFit: 'cover',
+              transform: isFlipped ? 'scaleX(-1)' : 'none',
+              width: '100%',
+            }}
+          />
+        </Box>
 
         {/* Blend mode overlay - only rendered for applicable complex filters */}
-        {!skipFilters && (filterDef.blendMode || filterDef.fill) && (
+        {!skipFilters && (filterDef.filterBlendMode || filterDef.filterFill) && (
           <Box
             sx={{
               position: 'absolute',
@@ -158,8 +171,8 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
               left: 0,
               width: '100%',
               height: '100%',
-              background: typeof filterDef.fill === 'string' ? filterDef.fill : 'transparent',
-              mixBlendMode: filterDef.blendMode || 'normal',
+              background: typeof filterDef.filterFill === 'string' ? filterDef.filterFill : 'transparent',
+              mixBlendMode: filterDef.filterBlendMode || 'normal',
               opacity: 1,
               pointerEvents: 'none', // Allows clicks to pass through to image
             }}

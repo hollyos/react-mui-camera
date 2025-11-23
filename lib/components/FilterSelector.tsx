@@ -1,7 +1,8 @@
 import React from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { FILTERS } from '../utils/filters';
-import type { FilterKey } from '../types/types';
+import { toCssBlendMode } from '../utils/styleUtils';
+import type { FilterKey, AllowedFilters } from '../types/types';
 
 /**
  * Props for the FilterSelector component
@@ -15,9 +16,10 @@ import type { FilterKey } from '../types/types';
  *   Receives the key of the newly selected filter
  */
 interface FilterSelectorProps {
+  allowedFilters?: AllowedFilters;
   capturedImage: string;
-  selectedFilter: FilterKey;
   onSelectFilter: (filterKey: FilterKey) => void;
+  selectedFilter: FilterKey;
 }
 
 /**
@@ -88,7 +90,12 @@ interface FilterSelectorProps {
  * @param {FilterSelectorProps} props - Component props
  * @returns {JSX.Element} A scrollable panel with categorized filter thumbnails
  */
-const FilterSelector: React.FC<FilterSelectorProps> = ({ capturedImage, selectedFilter, onSelectFilter }) => {
+const FilterSelector: React.FC<FilterSelectorProps> = ({
+  allowedFilters = 'all',
+  capturedImage,
+  onSelectFilter,
+  selectedFilter,
+}) => {
   /**
    * Groups filters by their section category
    *
@@ -102,10 +109,21 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ capturedImage, selected
 
   Object.entries(FILTERS).forEach(([key, config]) => {
     const k = key as FilterKey;
-    if (!filtersBySection[config.section]) {
-      filtersBySection[config.section] = [];
+    const section = config.section;
+
+    // Determine if this section is allowed
+    const isAllowed =
+      allowedFilters === 'all' ||
+      (typeof allowedFilters === 'string' && allowedFilters === section) ||
+      (Array.isArray(allowedFilters) && allowedFilters.includes(section));
+
+    if (!isAllowed) return;
+
+    if (!filtersBySection[section]) {
+      filtersBySection[section] = [];
     }
-    filtersBySection[config.section].push([k, config]);
+
+    filtersBySection[section].push([k, config]);
   });
 
   return (
@@ -143,7 +161,7 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ capturedImage, selected
 
             {/* Filter button grid for this section */}
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, mt: 4 }}>
-              {filters.map(([key, { name, filter, blendMode, fill }]) => (
+              {filters.map(([key, { name, filter, filterBlendMode, filterFill, imgBackground, imgBlendMode }]) => (
                 <Box key={key} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 70 }}>
                   {/* Filter thumbnail button */}
                   <Button
@@ -159,13 +177,33 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ capturedImage, selected
                     }}
                   >
                     {/* Base filtered image */}
-                    <img
-                      src={capturedImage}
-                      alt={name}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', filter }}
-                    />
+                    <Box
+                      sx={{
+                        alignItems: 'center',
+                        background: imgBackground || 'transparent',
+                        display: 'flex',
+                        height: '100%',
+                        justifyContent: 'center',
+                        overflow: 'hidden',
+                        width: '100%',
+                      }}
+                    >
+                      <img
+                        src={capturedImage}
+                        alt={name}
+                        style={{
+                          display: 'block',
+                          filter,
+                          height: '100%',
+                          mixBlendMode:
+                            toCssBlendMode(imgBlendMode === 'normal' ? 'initial' : imgBlendMode) || 'initial',
+                          objectFit: 'cover',
+                          width: '100%',
+                        }}
+                      />
+                    </Box>
                     {/* Blend mode overlay for complex filters */}
-                    {blendMode && typeof fill === 'string' && (
+                    {filterBlendMode && typeof filterFill === 'string' && (
                       <Box
                         sx={{
                           position: 'absolute',
@@ -173,8 +211,8 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ capturedImage, selected
                           left: 0,
                           width: '100%',
                           height: '100%',
-                          background: fill,
-                          mixBlendMode: blendMode,
+                          background: filterFill,
+                          mixBlendMode: filterBlendMode,
                           pointerEvents: 'none',
                         }}
                       />

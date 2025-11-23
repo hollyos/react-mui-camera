@@ -107,8 +107,8 @@ export const FILTERS = {
     section: 'Color Tones',
     filter:
       'brightness(104%) contrast(104%) grayscale(0%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(122%) sepia(0%)',
-    blendMode: 'multiply',
-    fill: 'rgba(0, 225, 250, 0.13)',
+    filterBlendMode: 'multiply',
+    filterFill: 'rgba(0, 225, 250, 0.13)',
   },
   /** Warm yellow overlay - evokes summer heat and sunshine */
   summerHeat: {
@@ -116,48 +116,48 @@ export const FILTERS = {
     section: 'Color Tones',
     filter:
       'brightness(103%) contrast(114%) grayscale(0%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(122%) sepia(0%)',
-    blendMode: 'overlay',
-    fill: 'rgba(250, 233, 0, 0.23)',
+    filterBlendMode: 'overlay',
+    filterFill: 'rgba(250, 233, 0, 0.23)',
   },
   /** Red-shifted hue with multiply - creates feverish, warm tone */
   fever: {
     name: 'Fever',
     section: 'Color Tones',
     filter: 'contrast(97%) grayscale(0%) hue-rotate(330deg) invert(0%) opacity(100%) saturate(111%) sepia(0%)',
-    blendMode: 'multiply',
-    fill: 'rgba(255, 0, 0, 0.13)',
+    filterBlendMode: 'multiply',
+    filterFill: 'rgba(255, 0, 0, 0.13)',
   },
   /** Bright magenta screen blend - bold, vibrant pink effect */
   strawberry: {
     name: 'Strawberry',
     section: 'Color Tones',
     filter: 'grayscale(0%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(100%) sepia(0%)',
-    blendMode: 'screen',
-    fill: 'rgba(250, 0, 204, 0.5)',
+    filterBlendMode: 'screen',
+    filterFill: 'rgba(250, 0, 204, 0.5)',
   },
   /** Purple/blue soft light with high saturation - club/party atmosphere */
   ibiza: {
     name: 'Ibiza',
     section: 'Color Tones',
     filter: 'contrast(107%) grayscale(0%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(165%) sepia(50%)',
-    blendMode: 'soft-light',
-    fill: 'rgba(58, 0, 250, 0.5)',
+    filterBlendMode: 'soft-light',
+    filterFill: 'rgba(58, 0, 250, 0.5)',
   },
   /** Magenta multiply overlay with high contrast - romantic sunset effect */
   sweetSunset: {
     name: 'Sweet Sunset',
     section: 'Color Tones',
     filter: 'contrast(128%) grayscale(0%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(120%) sepia(0%)',
-    blendMode: 'multiply',
-    fill: 'rgba(250, 0, 204, 0.15)',
+    filterBlendMode: 'multiply',
+    filterFill: 'rgba(250, 0, 204, 0.15)',
   },
   /** Blue multiply over grayscale - creates cold monochrome with blue tint */
   blueRock: {
     name: 'Blue Rock',
     section: 'Color Tones',
     filter: 'contrast(128%) grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(120%) sepia(0%)',
-    blendMode: 'multiply',
-    fill: 'rgba(0, 142, 250, 0.15)',
+    filterBlendMode: 'multiply',
+    filterFill: 'rgba(0, 142, 250, 0.15)',
   },
   /** Cyan multiply with sepia - underwater, tropical ocean feel */
   oceanWave: {
@@ -165,8 +165,8 @@ export const FILTERS = {
     section: 'Color Tones',
     filter:
       'brightness(105%) contrast(104%) grayscale(10%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(100%) sepia(50%)',
-    blendMode: 'multiply',
-    fill: 'rgba(0, 229, 250, 0.13)',
+    filterBlendMode: 'multiply',
+    filterFill: 'rgba(0, 229, 250, 0.13)',
   },
   /** Red overlay blend - adds warmth and slight color cast */
   littleRed: {
@@ -174,16 +174,16 @@ export const FILTERS = {
     section: 'Color Tones',
     filter:
       'brightness(105%) contrast(106%) grayscale(0%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(90%) sepia(0%)',
-    blendMode: 'overlay',
-    fill: 'rgba(250, 0, 0, 0.3)',
+    filterBlendMode: 'overlay',
+    filterFill: 'rgba(250, 0, 0, 0.3)',
   },
   /** Orange saturation blend on desaturated base - retro sci-fi look */
   spaceTrip: {
     name: 'Space Trip',
     section: 'Color Tones',
     filter: 'grayscale(50%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(140%) sepia(0%)',
-    blendMode: 'saturation',
-    fill: '#faaa00',
+    filterBlendMode: 'saturation',
+    filterFill: '#faaa00',
   },
   /** Yellow hard light - bright, high-energy desert sunrise */
   desertMorning: {
@@ -191,8 +191,8 @@ export const FILTERS = {
     section: 'Color Tones',
     filter:
       'brightness(110%) contrast(114%) grayscale(0%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(122%) sepia(0%)',
-    blendMode: 'hard-light',
-    fill: 'rgba(250, 229, 0, 0.2)',
+    filterBlendMode: 'hard-light',
+    filterFill: 'rgba(250, 229, 0, 0.2)',
   },
   /** Strong cyan multiply - deep underwater or lagoon effect */
   blueLagoon: {
@@ -200,8 +200,8 @@ export const FILTERS = {
     section: 'Color Tones',
     filter:
       'brightness(104%) contrast(104%) grayscale(0%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(122%) sepia(0%)',
-    blendMode: 'multiply',
-    fill: 'rgba(0, 225, 250, 0.5)',
+    filterBlendMode: 'multiply',
+    filterFill: 'rgba(0, 225, 250, 0.5)',
   },
   /** Cyan lighten with hue shift - creates ethereal ice palace atmosphere */
   warmIce: {
@@ -209,24 +209,24 @@ export const FILTERS = {
     section: 'Color Tones',
     filter:
       'brightness(110%) contrast(116%) grayscale(0%) hue-rotate(342deg) invert(0%) opacity(100%) saturate(84%) sepia(0%)',
-    blendMode: 'lighten',
-    fill: 'rgba(107, 233, 255, 0.23)',
+    filterBlendMode: 'lighten',
+    filterFill: 'rgba(107, 233, 255, 0.23)',
   },
   /** Blue multiply on grayscale - aquatic monochrome */
   waterness: {
     name: 'Waterness',
     section: 'Color Tones',
     filter: 'contrast(128%) grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(120%) sepia(0%)',
-    blendMode: 'multiply',
-    fill: 'rgba(0, 142, 250, 0.15)',
+    filterBlendMode: 'multiply',
+    filterFill: 'rgba(0, 142, 250, 0.15)',
   },
   /** Blue lighten on high-contrast grayscale - misty mountain landscape */
   distantMountain: {
     name: 'Distant Mountain',
     section: 'Color Tones',
     filter: 'contrast(120%) grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(100%) sepia(0%)',
-    blendMode: 'lighten',
-    fill: '#033dc5',
+    filterBlendMode: 'lighten',
+    filterFill: '#033dc5',
   },
   // ==========================================
   // SEPIA TONES
@@ -237,8 +237,8 @@ export const FILTERS = {
     name: 'Burnt Coffee',
     section: 'Sepia Tones',
     filter: 'contrast(80%) grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(100%) sepia(0%)',
-    blendMode: 'multiply',
-    fill: '#e3dca1',
+    filterBlendMode: 'multiply',
+    filterFill: '#e3dca1',
   },
   /** Partial grayscale with brown soft light - aged wood texture feel */
   oldWood: {
@@ -246,8 +246,8 @@ export const FILTERS = {
     section: 'Sepia Tones',
     filter:
       'brightness(105%) contrast(102%) grayscale(50%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(140%) sepia(9%)',
-    blendMode: 'soft-light',
-    fill: '#574400',
+    filterBlendMode: 'soft-light',
+    filterFill: '#574400',
   },
   /** High contrast sepia with red darken - dramatic antique photograph */
   coalPaper: {
@@ -255,15 +255,15 @@ export const FILTERS = {
     section: 'Sepia Tones',
     filter:
       'brightness(90%) contrast(125%) grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(100%) sepia(50%)',
-    blendMode: 'darken',
-    fill: 'rgba(125, 0, 0, 0.1)',
+    filterBlendMode: 'darken',
+    filterFill: 'rgba(125, 0, 0, 0.1)',
   },
   /** Light sepia with orange tint - soft vintage May day photograph */
   vintageMay: {
     name: 'Vintage May',
     section: 'Sepia Tones',
     filter: 'brightness(105%)  grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(100%) sepia(50%)',
-    fill: 'rgba(250, 170, 0, 0.13)',
+    filterFill: 'rgba(250, 170, 0, 0.13)',
   },
   // ==========================================
   // GRAYTONES
@@ -274,6 +274,135 @@ export const FILTERS = {
     name: 'Simple Gray',
     section: 'Graytones',
     filter: 'grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(100%) sepia(0%)',
-    fill: 'rgba(250, 170, 0, 0.13)',
+    filterFill: 'rgba(250, 170, 0, 0.13)',
+  },
+  // ==========================================
+  // FULL COLOR
+  //
+  // ==========================================
+  /** No filter - full color identity */
+  roseQuartz: {
+    name: 'Rose Quartz',
+    section: 'Full Color',
+    filter: 'grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(100%) sepia(0%)',
+    filterBlendMode: 'multiply',
+    filterFill: 'rgba(250, 0, 204, 0.5)',
+  },
+  amazon: {
+    name: 'Amazon',
+    section: 'Full Color',
+    filter: 'grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(100%) sepia(0%)',
+    filterBlendMode: 'multiply',
+    filterFill: '#00b309',
+  },
+  baselineSpecial: {
+    name: 'Baseline Special',
+    section: 'Full Color',
+    filter: 'grayscale(50%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(140%) sepia(0%)',
+    filterBlendMode: 'multiply',
+    filterFill: '#faaa00',
+  },
+  babyGlass: {
+    name: 'Baby Glass',
+    section: 'Full Color',
+    filter: 'grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(140%) sepia(0%)',
+    filterBlendMode: 'multiply',
+    filterFill: '#00ccfa',
+  },
+  roseGlass: {
+    name: 'Rose Glass',
+    section: 'Full Color',
+    filter: 'brightness(106%)  grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(100%) sepia(0%)',
+    filterBlendMode: 'multiply',
+    filterFill: '#fa0000',
+  },
+  yellowHaze: {
+    name: 'Yellow Haze',
+    section: 'Full Color',
+    filter: 'brightness(106%)  grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(100%) sepia(0%)',
+    filterBlendMode: 'multiply',
+    filterFill: '#ffff00',
+  },
+  blueHaze: {
+    name: 'Blue Haze',
+    section: 'Full Color',
+    filter: 'brightness(110%)  grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(100%) sepia(0%)',
+    filterBlendMode: 'multiply',
+    filterFill: 'rgba(0, 43, 255, 0.76)',
+  },
+  // ==========================================
+  // CROSSBLEND
+  //
+  // ==========================================
+  studio54: {
+    name: 'Studio 54',
+    section: 'Crossblend',
+    filter: 'grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(100%) sepia(0%)',
+    filterBlendMode: 'lighten',
+    filterFill: '#002b96',
+    imgBlendMode: 'multiply',
+    imgBackground: '#ff0000',
+  },
+  burntPeach: {
+    name: 'Burnt Peach',
+    section: 'Crossblend',
+    filter: 'grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(100%) sepia(0%)',
+    filterBlendMode: 'lighten',
+    filterFill: '#f430a9',
+    imgBlendMode: 'hard-light',
+    imgBackground: '#c4ba86',
+  },
+  monoSky: {
+    name: 'Mono Sky',
+    section: 'Crossblend',
+    filter: 'contrast(120%) grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(100%) sepia(0%)',
+    filterBlendMode: 'lighten',
+    filterFill: '#002a8c',
+    imgBlendMode: 'multiply',
+    imgBackground: '#42a4ff',
+  },
+  mustardGrass: {
+    name: 'Mustard Grass',
+    section: 'Crossblend',
+    filter: 'contrast(125%) grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(100%) sepia(0%)',
+    filterBlendMode: 'lighten',
+    filterFill: '#0d5c45',
+    imgBlendMode: 'multiply',
+    imgBackground: '#ffcd45',
+  },
+  leaf: {
+    name: 'Leaf',
+    section: 'Crossblend',
+    filter: 'contrast(79%) grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(100%) sepia(0%)',
+    filterBlendMode: 'multiply',
+    filterFill: '#f9ed3a',
+    imgBlendMode: 'lighten',
+    imgBackground: '#0665c4',
+  },
+  ryellow: {
+    name: 'Ryellow',
+    section: 'Crossblend',
+    filter: 'contrast(90%) grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(100%) sepia(0%)',
+    filterBlendMode: 'lighten',
+    filterFill: '#c90300',
+    imgBlendMode: 'multiply',
+    imgBackground: '#fffb00',
+  },
+  baselineDark: {
+    name: 'Baseline Dark',
+    section: 'Crossblend',
+    filter: 'contrast(90%) grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(100%) sepia(0%)',
+    filterFill: 'rgba(250, 170, 0, 0.13)',
+    imgBlendMode: 'darken',
+    imgBackground: '#faaa00',
+  },
+  redSky: {
+    name: 'Red Sky',
+    section: 'Crossblend',
+    filter: 'contrast(90%) grayscale(100%) hue-rotate(0deg) invert(0%) opacity(100%) saturate(100%) sepia(0%)',
+    filterBlendMode: 'lighten',
+    filterFill: 'rgba(171, 0, 0, 0.83)',
+    imgBlendMode: 'multiply',
+    imgBackground: '#42a4ff',
   },
 };

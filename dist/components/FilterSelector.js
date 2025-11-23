@@ -146,8 +146,7 @@ const FilterSelector = ({ capturedImage, selectedFilter, onSelectFilter }) => {
                               _jsx('img', {
                                 src: capturedImage,
                                 alt: name,
-                                className: 'w-full h-full object-cover',
-                                style: { filter },
+                                style: { width: '100%', height: '100%', objectFit: 'cover', filter },
                               }),
                               blendMode &&
                                 typeof fill === 'string' &&

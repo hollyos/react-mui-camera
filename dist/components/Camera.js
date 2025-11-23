@@ -86,7 +86,7 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
   // UI state
   const [showControls, setShowControls] = useState(false);
   const [error, setError] = useState('');
-  const [isFlipped, setIsFlipped] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(true);
   // Mobile detection
   const [isMobile, setIsMobile] = useState(false);
   const [mobileOS, setMobileOS] = useState(null);
@@ -294,10 +294,13 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
   // Styles for video preview with real-time adjustments
   const videoStyle = {
     filter: `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)`,
-    width: '100%',
     height: '100%',
+    left: 0,
     objectFit: 'cover',
+    position: 'absolute',
+    top: 0,
     transform: isFlipped ? 'scaleX(-1)' : 'none',
+    width: '100%',
   };
   return _jsxs(Box, {
     sx: {
@@ -311,14 +314,7 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
       !capturedImage || skipFilters
         ? _jsxs(_Fragment, {
             children: [
-              _jsx('video', {
-                ref: videoRef,
-                autoPlay: true,
-                playsInline: true,
-                muted: true,
-                style: videoStyle,
-                className: 'absolute inset-0',
-              }),
+              _jsx('video', { ref: videoRef, autoPlay: true, playsInline: true, muted: true, style: videoStyle }),
               _jsx(CameraControls, {
                 showControls: showControls,
                 toggleControls: () => setShowControls(!showControls),
@@ -343,7 +339,8 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false }) => {
             ],
           })
         : /* Image Preview Mode with Filters */
-          _jsxs(_Fragment, {
+          _jsxs(Box, {
+            sx: { width: '100%', height: '100%', position: 'relative', display: 'flex', flexDirection: 'column' },
             children: [
               _jsx(ImagePreview, {
                 capturedImage: capturedImage,

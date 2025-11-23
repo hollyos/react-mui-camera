@@ -1,6 +1,6 @@
 {
   "name": "react-mui-camera",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Universal Camera component for React that utilizes the Material Design System.",
   "homepage": "https://github.com/hollyos/react-mui-camera",
   "author": "Holly Springsteen <hhspringsteen@gmail.com>",
@@ -49,6 +49,7 @@
   "scripts": {
     "build": "tsc --project tsconfig.json",
     "lint": "pnpm exec eslint . --ext .js,.jsx,.ts,.tsx",
+    "npm:publish": "pnpm publish --access public",
     "prepare": "pnpm build",
     "prepare:hooks": "husky",
     "prettier:check": "pnpm exec prettier ./lib --check",

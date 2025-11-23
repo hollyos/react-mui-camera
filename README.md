@@ -27,7 +27,8 @@ Easily integrate high-quality photo capture, real-time adjustments, and optional
 - **Front / Rear camera switching** with automatic device detection
 - **Mirror / Flip mode** for selfie correction
 - **High-quality JPEG output** (95% quality)
-- **Optional filter pipeline** with 30+ preset filters
+- **30+ customizable photo filters** with blend modes, overlays, and backgrounds
+- **Flexible filter configuration per section**
 - **Responsive fullscreen UI** for both desktop and mobile
 - **Graceful error handling**
 - **Lightweight and dependency-free capture pipeline** (no WASM or native code)
@@ -107,11 +108,28 @@ This enables:
 
 ## **🔧 Props**
 
-| Prop              | Type                      | Default | Description                               |
-| ----------------- | ------------------------- | ------- | ----------------------------------------- |
-| `onImageCaptured` | `(image: string) => void` | —       | Called with the final image (DataURL)     |
-| `onClose`         | `() => void`              | —       | Called when the user closes the camera UI |
-| `skipFilters`     | `boolean`                 | `false` | If true, bypasses filter UI entirely      |
+| Prop              | Type                      | Default           | Description                                     |
+| ----------------- | ------------------------- | ----------------- | ----------------------------------------------- |
+| `onImageCaptured` | `(image: string) => void` | —                 | Called with the final image (DataURL)           |
+| `onClose`         | `() => void`              | —                 | Called when the user closes the camera UI       |
+| `skipFilters`     | `boolean`                 | `false`           | Optional: If true, bypasses filter UI entirely  |
+| `allowedFilters`  | `AllowedFilters`          | `"Basic Filters"` | Optional: restrict filters to specific sections |
+
+---
+
+## **🎛 Filter Configuration**
+
+### **Advanced Filter Styling**
+
+Each filter supports:
+
+- `filter`: CSS filter string
+- `filterBlendMode`: canvas blend mode for overlays
+- `filterFill`: overlay color
+- `imgBlendMode`: canvas blend mode for image compositing
+- `imgBackground`: image background color under blend mode
+
+These match the actual preview and export behavior for full WYSIWYG output.
 
 ---
 

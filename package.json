@@ -48,6 +48,7 @@
   ],
   "scripts": {
     "build": "tsc --project tsconfig.json",
+    "deploy:docs": "gh-pages -d example/dist",
     "lint": "pnpm exec eslint . --ext .js,.jsx,.ts,.tsx",
     "npm:publish": "pnpm publish --access public",
     "prepare": "pnpm build",

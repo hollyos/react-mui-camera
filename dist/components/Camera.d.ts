@@ -1,4 +1,4 @@
-import { CameraProps } from '../types/types';
+import type { CameraProps } from '../types/types';
 /**
  * Camera Component
  *

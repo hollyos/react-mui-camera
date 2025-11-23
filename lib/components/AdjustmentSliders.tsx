@@ -76,7 +76,6 @@ const AdjustmentSliders: React.FC<AdjustmentSlidersProps> = ({
   const [initialHeight, setInitialHeight] = useState<number>(0);
 
   const [startY, setStartY] = useState<number | null>(null);
-  const [currentY, setCurrentY] = useState<number | null>(null);
   const [dragging, setDragging] = useState(false);
   const [height, setHeight] = useState<number>(0);
 
@@ -160,7 +159,6 @@ const AdjustmentSliders: React.FC<AdjustmentSlidersProps> = ({
   const resetDrag = () => {
     setDragging(false);
     setStartY(null);
-    setCurrentY(null);
     setHeight(initialHeight);
   };
 
@@ -200,7 +198,7 @@ const AdjustmentSliders: React.FC<AdjustmentSlidersProps> = ({
               min={50}
               max={150}
               value={brightness}
-              onChange={(e, value) => onBrightnessChange(typeof value === 'number' ? value : value[0])}
+              onChange={(_, value) => onBrightnessChange(typeof value === 'number' ? value : value[0])}
               sx={{
                 color: 'primary.main',
                 '& .MuiSlider-thumb': { bgcolor: 'white' },
@@ -224,7 +222,7 @@ const AdjustmentSliders: React.FC<AdjustmentSlidersProps> = ({
               min={50}
               max={150}
               value={contrast}
-              onChange={(e, value) => onContrastChange(typeof value === 'number' ? value : value[0])}
+              onChange={(_, value) => onContrastChange(typeof value === 'number' ? value : value[0])}
               sx={{
                 color: 'primary.main',
                 '& .MuiSlider-thumb': { bgcolor: 'white' },
@@ -248,7 +246,7 @@ const AdjustmentSliders: React.FC<AdjustmentSlidersProps> = ({
               min={0}
               max={200}
               value={saturation}
-              onChange={(e, value) => onSaturationChange(typeof value === 'number' ? value : value[0])}
+              onChange={(_, value) => onSaturationChange(typeof value === 'number' ? value : value[0])}
               sx={{
                 color: 'primary.main',
                 '& .MuiSlider-thumb': { bgcolor: 'white' },

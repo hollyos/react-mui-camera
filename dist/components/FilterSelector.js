@@ -103,7 +103,7 @@ const FilterSelector = ({ capturedImage, selectedFilter, onSelectFilter }) => {
         direction: 'row',
         spacing: 0,
         sx: { overflowX: 'auto', pb: 1 },
-        children: Object.entries(filtersBySection).map(([sectionName, filters], sectionIndex) =>
+        children: Object.entries(filtersBySection).map(([sectionName, filters]) =>
           _jsxs(
             Box,
             {

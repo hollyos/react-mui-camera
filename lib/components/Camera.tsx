@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { Box, SwipeableDrawer, Collapse } from '@mui/material';
+import { Box, Collapse } from '@mui/material';
 
 import ActionButtons from './ActionButtons';
 import AdjustmentSliders from './AdjustmentSliders';
@@ -8,12 +8,13 @@ import CameraError from './CameraError';
 import CaptureButton from './CaptureButton';
 import FilterSelector from './FilterSelector';
 import ImagePreview from './ImagePreview';
+import CameraSwitch from './CameraSwitch';
 
 import { startCamera as startCameraUtil, stopCamera as stopCameraUtil } from '../utils/cameraUtils';
-import { CameraProps, FilterKey } from '../types/types';
 import { FILTERS } from '../utils/filters';
 import { detectDevice } from '../utils/device';
-import CameraSwitch from './CameraSwitch';
+
+import type { CameraProps, FilterKey } from '../types/types';
 
 /**
  * Camera Component

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import { FILTERS } from '../utils/filters';
-import { FilterKey } from '../types/types';
+import type { FilterKey } from '../types/types';
 
 /**
  * Props for the ImagePreview component

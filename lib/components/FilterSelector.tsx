@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { FILTERS } from '../utils/filters';
-import { FilterKey } from '../types/types';
+import type { FilterKey } from '../types/types';
 
 /**
  * Props for the FilterSelector component
@@ -127,7 +127,7 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({ capturedImage, selected
 
       {/* Scrollable filter container */}
       <Stack direction='row' spacing={0} sx={{ overflowX: 'auto', pb: 1 }}>
-        {Object.entries(filtersBySection).map(([sectionName, filters], sectionIndex) => (
+        {Object.entries(filtersBySection).map(([sectionName, filters]) => (
           <Box key={sectionName} sx={{ position: 'relative', pr: 3, mr: 3 }}>
             {/* Section label - positioned above filter buttons */}
             <Box sx={{ width: '100%', mb: 1, position: 'absolute', top: 0 }}>

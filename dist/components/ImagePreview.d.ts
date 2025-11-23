@@ -1,5 +1,5 @@
 import React from 'react';
-import { FilterKey } from '../types/types';
+import type { FilterKey } from '../types/types';
 /**
  * Props for the ImagePreview component
  *

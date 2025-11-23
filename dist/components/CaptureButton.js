@@ -57,6 +57,9 @@ const CaptureButton = ({ onCapture, isStreaming, mobileOS, isMobile }) => {
       borderRadius: '50%',
       padding: '4px',
       transform: 'translateX(-50%)',
+      position: 'fixed',
+      bottom: 40,
+      left: '50%',
       zIndex: 10,
     },
     children: _jsx(Button, {

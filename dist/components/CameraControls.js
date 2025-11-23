@@ -73,7 +73,11 @@ const CameraControls = ({ isFlipped, onClose, showControls, toggleControls, togg
             }),
           ],
         }),
-        _jsx(Typography, { variant: 'h6', sx: { color: 'white' }, children: showControls ? 'Adjustments' : 'Camera' }),
+        _jsx(Typography, {
+          variant: 'h6',
+          sx: { color: 'white', position: 'absolute', left: '50%', transform: 'translateX(-50%)' },
+          children: showControls ? 'Adjustments' : 'Camera',
+        }),
         onClose &&
           _jsx(IconButton, {
             onClick: onClose,

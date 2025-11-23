@@ -389,7 +389,7 @@ const Camera: React.FC<CameraProps> = ({ onImageCaptured, onClose, skipFilters =
           <Box
             sx={{
               alignItems: 'center',
-              bottom: 0,
+              bottom: 40,
               display: 'flex',
               justifyContent: 'space-around',
               left: 0,

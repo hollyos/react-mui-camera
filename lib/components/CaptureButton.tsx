@@ -73,6 +73,9 @@ const CaptureButton: React.FC<CaptureButtonProps> = ({ onCapture, isStreaming, m
         borderRadius: '50%',
         padding: '4px',
         transform: 'translateX(-50%)',
+        position: 'fixed',
+        bottom: 40,
+        left: '50%',
         zIndex: 10,
       }}
     >

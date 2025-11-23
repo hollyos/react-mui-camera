@@ -98,7 +98,10 @@ const CameraControls: React.FC<CameraControlsProps> = ({
         </Box>
 
         {/* Center title - dynamically updates based on current mode */}
-        <Typography variant='h6' sx={{ color: 'white' }}>
+        <Typography
+          variant='h6'
+          sx={{ color: 'white', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}
+        >
           {showControls ? 'Adjustments' : 'Camera'}
         </Typography>
 

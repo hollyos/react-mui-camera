@@ -69,7 +69,7 @@ import { detectDevice } from '../utils/device';
  * @param {CameraProps} props - Component props
  * @returns {JSX.Element} A full-screen camera interface with controls and preview
  */
-const Camera = ({ onImageCaptured, onClose, skipFilters = false, allowedFilters = 'Basic Filters' }) => {
+const Camera = ({ onImageCaptured, onClose, skipFilters = false, allowedFilters = 'all' }) => {
   // Refs for DOM elements
   const videoRef = useRef(null);
   const canvasRef = useRef(null);

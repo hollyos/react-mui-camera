@@ -13,6 +13,14 @@ Easily integrate high-quality photo capture, real-time adjustments, and optional
 
 ---
 
+[Live Demo](https://hollyos.github.io/react-mui-camera)
+
+[npm Package](https://www.npmjs.com/package/react-mui-camera)
+
+[GitHub Repo](https://github.com/hollyos/react-mui-camera)
+
+---
+
 ## **✨ Features**
 
 - **Live Camera Preview** with real-time brightness, contrast, and saturation adjustments

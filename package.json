@@ -1,6 +1,6 @@
 {
   "name": "react-mui-camera",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Universal Camera component for React that utilizes the Material Design System.",
   "homepage": "https://hollyos.github.io/react-mui-camera",
   "author": "Holly Springsteen <hhspringsteen@gmail.com>",
@@ -42,12 +42,18 @@
   },
   "main": "dist/index.js",
   "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js"
+    }
+  },
   "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsc --project tsconfig.json",
+    "build": "tsc --project tsconfig.json && tsc-alias",
     "deploy:docs": "gh-pages -d example/dist",
     "lint": "pnpm exec eslint . --ext .js,.jsx,.ts,.tsx",
     "npm:publish": "pnpm publish --access public",
@@ -80,6 +86,7 @@
     "prettier": "3.6.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "tsc-alias": "^1.8.16",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.47.0"
   },

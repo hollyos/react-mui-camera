@@ -9,12 +9,12 @@
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "lib": ["DOM", "ES2021"],
-    "module": "ESNext",
+    "module": "es2022",
     "moduleResolution": "bundler",
     "outDir": "./dist",
     "skipLibCheck": true,
     "strict": true,
-    "target": "esnext"
+    "target": "es2022"
   },
   "include": ["lib/**/*"]
 }

@@ -1,4 +1,4 @@
-export const validCssBlendModes = new Set([
+const validCssBlendModes = new Set([
   'normal',
   'multiply',
   'screen',
@@ -16,6 +16,9 @@ export const validCssBlendModes = new Set([
   'color',
   'luminosity',
 ]);
-export const toCssBlendMode = (mode) => (validCssBlendModes.has(mode || '') ? mode : undefined);
-export const generateFilterCSS = ({ brightness, contrast, saturation }, extra = '') =>
+const toCssBlendMode = (mode) => (validCssBlendModes.has(mode || '') ? mode : undefined);
+const generateFilterCSS = ({ brightness, contrast, saturation }, extra = '') =>
   `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%) ${extra}`;
+
+export { generateFilterCSS, toCssBlendMode, validCssBlendModes };
+//# sourceMappingURL=styleUtils.js.map

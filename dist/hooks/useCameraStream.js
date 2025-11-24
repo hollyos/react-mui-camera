@@ -1,13 +1,14 @@
 import { useRef, useState, useCallback } from 'react';
-import { startCamera as startCameraUtil, stopCamera as stopCameraUtil } from '../utils/cameraUtils';
-export const useCameraStream = () => {
+import { startCamera, stopCamera } from '../utils/cameraUtils.js';
+
+const useCameraStream = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const streamRef = useRef(null);
   const [isStreaming, setIsStreaming] = useState(false);
   const initCamera = useCallback(async (facingMode) => {
     try {
-      const stream = await startCameraUtil(facingMode);
+      const stream = await startCamera(facingMode);
       streamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
@@ -21,9 +22,9 @@ export const useCameraStream = () => {
       throw err;
     }
   }, []);
-  const stopCamera = useCallback(() => {
+  const stopCamera$1 = useCallback(() => {
     if (streamRef.current) {
-      stopCameraUtil(streamRef.current);
+      stopCamera(streamRef.current);
       streamRef.current = null;
       setIsStreaming(false);
     }
@@ -34,6 +35,9 @@ export const useCameraStream = () => {
     streamRef,
     isStreaming,
     initCamera,
-    stopCamera,
+    stopCamera: stopCamera$1,
   };
 };
+
+export { useCameraStream };
+//# sourceMappingURL=useCameraStream.js.map

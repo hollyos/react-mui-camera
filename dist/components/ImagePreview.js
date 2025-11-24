@@ -1,8 +1,9 @@
-import { jsx as _jsx, jsxs as _jsxs } from 'react/jsx-runtime';
+import { j as jsxRuntimeExports } from '../_virtual/jsx-runtime.js';
 import React from 'react';
 import { Box } from '@mui/material';
-import { FILTERS } from '../utils/filters';
-import { toCssBlendMode } from '../utils/styleUtils';
+import { FILTERS } from '../utils/filters.js';
+import { toCssBlendMode } from '../utils/styleUtils.js';
+
 /**
  * ImagePreview Component
  *
@@ -91,7 +92,7 @@ const ImagePreview = React.memo(
     contrast(${imageAdjustments.contrast}%)
     saturate(${imageAdjustments.saturation}%)
   `;
-    return _jsx(Box, {
+    return jsxRuntimeExports.jsx(Box, {
       sx: {
         width: '100%',
         height: '100%',
@@ -100,10 +101,10 @@ const ImagePreview = React.memo(
         justifyContent: 'center',
         boxSizing: 'border-box',
       },
-      children: _jsxs(Box, {
+      children: jsxRuntimeExports.jsxs(Box, {
         sx: { position: 'relative', display: 'inline-block', lineHeight: 0 },
         children: [
-          _jsx(Box, {
+          jsxRuntimeExports.jsx(Box, {
             sx: {
               alignItems: 'center',
               background: filterDef.imgBackground || 'transparent',
@@ -113,7 +114,7 @@ const ImagePreview = React.memo(
               overflow: 'hidden',
               width: '100%',
             },
-            children: _jsx('img', {
+            children: jsxRuntimeExports.jsx('img', {
               src: capturedImage,
               alt: 'Captured',
               style: {
@@ -131,7 +132,7 @@ const ImagePreview = React.memo(
           }),
           !skipFilters &&
             (filterDef.filterBlendMode || filterDef.filterFill) &&
-            _jsx(Box, {
+            jsxRuntimeExports.jsx(Box, {
               sx: {
                 position: 'absolute',
                 top: 0,
@@ -149,4 +150,6 @@ const ImagePreview = React.memo(
     });
   }
 );
-export default ImagePreview;
+
+export { ImagePreview as default };
+//# sourceMappingURL=ImagePreview.js.map

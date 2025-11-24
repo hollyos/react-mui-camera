@@ -1,8 +1,9 @@
-import { jsx as _jsx, jsxs as _jsxs } from 'react/jsx-runtime';
-import { useEffect, useRef, useState } from 'react';
+import { j as jsxRuntimeExports } from '../_virtual/jsx-runtime.js';
+import { useRef, useState, useEffect } from 'react';
 import { Box } from '@mui/material';
+
 const ContainerHandle = ({ handleStart, handleMove, handleEnd }) => {
-  return _jsx(Box, {
+  return jsxRuntimeExports.jsx(Box, {
     sx: {
       borderRadius: 3,
       boxShadow: '0 -2px 6px rgba(0,0,0,0.5)',
@@ -16,7 +17,7 @@ const ContainerHandle = ({ handleStart, handleMove, handleEnd }) => {
     onTouchMove: (e) => handleMove(e.touches[0].clientY),
     onTouchEnd: handleEnd,
     onMouseDown: (e) => handleStart(e.clientY),
-    children: _jsx(Box, {
+    children: jsxRuntimeExports.jsx(Box, {
       sx: {
         bgcolor: 'grey.500',
         borderRadius: 3,
@@ -94,7 +95,7 @@ const CollapsableContainer = ({
       setHeight(measuredHeight);
     }
   }, []);
-  return _jsxs(Box, {
+  return jsxRuntimeExports.jsxs(Box, {
     sx: {
       bgcolor: 'rgba(0,0,0,0.8)',
       borderRadius: position === 'bottom' ? '0 0 20px 20px' : '20px 20px 0 0',
@@ -106,15 +107,25 @@ const CollapsableContainer = ({
     },
     children: [
       position === 'top' &&
-        _jsx(ContainerHandle, { handleStart: handleStart, handleMove: handleMove, handleEnd: handleEnd }),
-      _jsx(Box, {
+        jsxRuntimeExports.jsx(ContainerHandle, {
+          handleStart: handleStart,
+          handleMove: handleMove,
+          handleEnd: handleEnd,
+        }),
+      jsxRuntimeExports.jsx(Box, {
         ref: contentRef,
         sx: { height: `${height}px`, transition: 'height 0.3s ease-in-out', overflow: 'hidden', p: 2 },
-        children: _jsx(Box, { ref: innerRef, children: children }),
+        children: jsxRuntimeExports.jsx(Box, { ref: innerRef, children: children }),
       }),
       position === 'bottom' &&
-        _jsx(ContainerHandle, { handleStart: handleStart, handleMove: handleMove, handleEnd: handleEnd }),
+        jsxRuntimeExports.jsx(ContainerHandle, {
+          handleStart: handleStart,
+          handleMove: handleMove,
+          handleEnd: handleEnd,
+        }),
     ],
   });
 };
-export default CollapsableContainer;
+
+export { CollapsableContainer as default };
+//# sourceMappingURL=CollapsableContainer.js.map

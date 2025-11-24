@@ -53,12 +53,13 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc --project tsconfig.json && tsc-alias",
+    "build": "rollup -c",
     "deploy:docs": "gh-pages -d example/dist",
     "lint": "pnpm exec eslint . --ext .js,.jsx,.ts,.tsx",
     "npm:publish": "pnpm publish --access public",
     "prepare": "pnpm build",
     "prepare:hooks": "husky",
+    "prepublishOnly": "pnpm build",
     "prettier:check": "pnpm exec prettier ./lib --check",
     "prettier:write": "pnpm exec prettier ./lib --write",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -76,6 +77,9 @@
     "@eslint/js": "^9.39.1",
     "@mui/material": "^7.3.5",
     "@mui/system": "^7.3.5",
+    "@rollup/plugin-commonjs": "^29.0.0",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
     "@types/react": "^19.2.6",
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.1",
@@ -86,6 +90,10 @@
     "prettier": "3.6.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "rollup": "^4.53.3",
+    "rollup-plugin-dts": "^6.2.3",
+    "rollup-plugin-preserve-shebang": "^1.0.1",
+    "rollup-plugin-typescript2": "^0.36.0",
     "tsc-alias": "^1.8.16",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.47.0"

@@ -53,7 +53,7 @@
  * const stream = await startCamera('environment');
  * ```
  */
-export const startCamera = async (facingMode) => {
+const startCamera = async (facingMode) => {
   const constraints = {
     video: {
       facingMode,
@@ -114,7 +114,7 @@ export const startCamera = async (facingMode) => {
  * stopCamera(null); // No error thrown
  * ```
  */
-export const stopCamera = (stream) => {
+const stopCamera = (stream) => {
   if (stream) {
     stream.getTracks().forEach((track) => {
       track.stop();
@@ -122,3 +122,6 @@ export const stopCamera = (stream) => {
     });
   }
 };
+
+export { startCamera, stopCamera };
+//# sourceMappingURL=cameraUtils.js.map

@@ -8,7 +8,7 @@
  * @returns An object with two properties: `isMobile` indicating whether the device is mobile,
  * and `mobileOS` indicating the type of mobile OS (either "android" or "ios"), or null if not mobile.
  */
-export function detectDevice() {
+function detectDevice() {
   const ua = navigator.userAgent || navigator.vendor;
   // Android (phone or tablet)
   if (/android/i.test(ua)) {
@@ -24,3 +24,6 @@ export function detectDevice() {
   }
   return { isMobile: false, mobileOS: null };
 }
+
+export { detectDevice };
+//# sourceMappingURL=device.js.map

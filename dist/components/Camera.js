@@ -1,17 +1,18 @@
-import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from 'react/jsx-runtime';
+import { j as jsxRuntimeExports } from '../_virtual/jsx-runtime.js';
 import { useState, useEffect } from 'react';
 import { Box, Collapse } from '@mui/material';
-import ActionBar from './ActionButtons';
-import AdjustmentSliders from './AdjustmentSliders';
-import CameraControls from './CameraControls';
-import CameraError from './CameraError';
-import CaptureButton from './CaptureButton';
-import ImagePreview from './ImagePreview';
-import CameraSwitch from './CameraSwitch';
-import CollapsableContainer from './CollapsableContainer';
-import { useCameraStream } from '../hooks/useCameraStream';
-import { FILTERS } from '../utils/filters';
-import { generateFilterCSS } from '../utils/styleUtils';
+import ActionBar from './ActionButtons.js';
+import AdjustmentSliders from './AdjustmentSliders.js';
+import CameraControls from './CameraControls.js';
+import CameraError from './CameraError.js';
+import CaptureButton from './CaptureButton.js';
+import ImagePreview from './ImagePreview.js';
+import CameraSwitch from './CameraSwitch.js';
+import CollapsableContainer from './CollapsableContainer.js';
+import { useCameraStream } from '../hooks/useCameraStream.js';
+import { FILTERS } from '../utils/filters.js';
+import { generateFilterCSS } from '../utils/styleUtils.js';
+
 /**
  * Camera Component
  *
@@ -250,7 +251,7 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false, allowedFilters 
     transform: isFlipped ? 'scaleX(-1)' : 'none',
     width: '100%',
   };
-  return _jsxs(Box, {
+  return jsxRuntimeExports.jsxs(Box, {
     sx: {
       width: '100%',
       height: '100%',
@@ -260,31 +261,37 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false, allowedFilters 
     },
     children: [
       !capturedImage || skipFilters
-        ? _jsxs(_Fragment, {
+        ? jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
             children: [
-              _jsx('video', { ref: videoRef, autoPlay: true, playsInline: true, muted: true, style: videoStyle }),
-              _jsx(CameraControls, {
+              jsxRuntimeExports.jsx('video', {
+                ref: videoRef,
+                autoPlay: true,
+                playsInline: true,
+                muted: true,
+                style: videoStyle,
+              }),
+              jsxRuntimeExports.jsx(CameraControls, {
                 showControls: showControls,
                 toggleControls: () => setShowControls(!showControls),
                 isFlipped: isFlipped,
                 toggleFlip: () => setIsFlipped((prev) => !prev),
                 onClose: onClose ? handleClose : undefined,
               }),
-              _jsx(Collapse, {
+              jsxRuntimeExports.jsx(Collapse, {
                 in: showControls,
                 timeout: 'auto',
                 unmountOnExit: true,
                 style: { position: 'absolute', top: '72px', width: '100%' },
-                children: _jsx(CollapsableContainer, {
+                children: jsxRuntimeExports.jsx(CollapsableContainer, {
                   onCloseEvent: 'adjustmentSwipeClose',
-                  children: _jsx(AdjustmentSliders, {
+                  children: jsxRuntimeExports.jsx(AdjustmentSliders, {
                     imageAdjustments: imageAdjustments,
                     onAdjustmentsChange: setImageAdjustments,
                   }),
                 }),
               }),
-              error && _jsx(CameraError, { message: error }),
-              _jsxs(Box, {
+              error && jsxRuntimeExports.jsx(CameraError, { message: error }),
+              jsxRuntimeExports.jsxs(Box, {
                 sx: {
                   alignItems: 'center',
                   bottom: 20,
@@ -297,15 +304,15 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false, allowedFilters 
                   width: '100%',
                 },
                 children: [
-                  _jsx(Box, { sx: { width: 80 } }),
-                  _jsx(CaptureButton, { onCapture: handleCapturePhoto, isStreaming: isStreaming }),
-                  _jsx(CameraSwitch, { switchCamera: handleSwitchCamera, facingMode: facingMode }),
+                  jsxRuntimeExports.jsx(Box, { sx: { width: 80 } }),
+                  jsxRuntimeExports.jsx(CaptureButton, { onCapture: handleCapturePhoto, isStreaming: isStreaming }),
+                  jsxRuntimeExports.jsx(CameraSwitch, { switchCamera: handleSwitchCamera, facingMode: facingMode }),
                 ],
               }),
             ],
           })
         : /* Image Preview Mode with Filters */
-          _jsxs(Box, {
+          jsxRuntimeExports.jsxs(Box, {
             sx: {
               display: 'flex',
               flexDirection: 'column',
@@ -314,7 +321,7 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false, allowedFilters 
               width: '100%',
             },
             children: [
-              _jsx(
+              jsxRuntimeExports.jsx(
                 ImagePreview,
                 {
                   capturedImage: capturedImage,
@@ -325,7 +332,7 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false, allowedFilters 
                 },
                 `${selectedFilter}-${imageAdjustments.brightness}-${imageAdjustments.contrast}-${imageAdjustments.saturation}`
               ),
-              _jsx(ActionBar, {
+              jsxRuntimeExports.jsx(ActionBar, {
                 allowedFilters: allowedFilters,
                 capturedImage: capturedImage,
                 imageAdjustments: imageAdjustments,
@@ -339,8 +346,10 @@ const Camera = ({ onImageCaptured, onClose, skipFilters = false, allowedFilters 
               }),
             ],
           }),
-      _jsx('canvas', { ref: canvasRef, style: { display: 'none' } }),
+      jsxRuntimeExports.jsx('canvas', { ref: canvasRef, style: { display: 'none' } }),
     ],
   });
 };
-export default Camera;
+
+export { Camera as default };
+//# sourceMappingURL=Camera.js.map

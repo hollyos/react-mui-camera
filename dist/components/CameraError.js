@@ -1,6 +1,7 @@
-import { jsx as _jsx } from 'react/jsx-runtime';
+import { j as jsxRuntimeExports } from '../_virtual/jsx-runtime.js';
 import React from 'react';
 import { Box, Typography } from '@mui/material';
+
 /**
  * CameraError Component
  *
@@ -33,7 +34,7 @@ import { Box, Typography } from '@mui/material';
  * @returns {JSX.Element} A centered error message box with red background
  */
 const CameraError = React.memo(({ message }) => {
-  return _jsx(Box, {
+  return jsxRuntimeExports.jsx(Box, {
     sx: {
       position: 'absolute',
       top: '50%',
@@ -46,7 +47,9 @@ const CameraError = React.memo(({ message }) => {
       borderRadius: 2,
       zIndex: 10,
     },
-    children: _jsx(Typography, { children: message }),
+    children: jsxRuntimeExports.jsx(Typography, { children: message }),
   });
 });
-export default CameraError;
+
+export { CameraError as default };
+//# sourceMappingURL=CameraError.js.map

@@ -1,8 +1,9 @@
-import { jsx as _jsx } from 'react/jsx-runtime';
+import { j as jsxRuntimeExports } from '../_virtual/jsx-runtime.js';
 import React from 'react';
-import { IconButton, Box } from '@mui/material';
-import { MdFlipCameraAndroid } from 'react-icons/md';
-import { useDeviceInfo } from '../hooks/useDeviceInfo';
+import { Box, IconButton } from '@mui/material';
+import { MdFlipCameraAndroid } from '../node_modules/.pnpm/react-icons@5.5.0_react@19.2.0/node_modules/react-icons/md/index.js';
+import { useDeviceInfo } from '../hooks/useDeviceInfo.js';
+
 /**
  * CameraSwitch Component
  *
@@ -15,10 +16,10 @@ const CameraSwitch = React.memo(({ switchCamera, facingMode }) => {
     transition: 'transform 0.3s cubic-bezier(0.88, 0.18, 0.61, 1.02)',
     transform: facingMode === 'user' ? 'rotate(180deg)' : 'rotate(0deg)',
   };
-  return _jsx(Box, {
+  return jsxRuntimeExports.jsx(Box, {
     children:
       isMobile &&
-      _jsx(IconButton, {
+      jsxRuntimeExports.jsx(IconButton, {
         onClick: switchCamera,
         sx: {
           color: 'white',
@@ -28,9 +29,11 @@ const CameraSwitch = React.memo(({ switchCamera, facingMode }) => {
         },
         children:
           mobileOS === 'android'
-            ? _jsx(MdFlipCameraAndroid, { size: 30, style: { ...iconTransition } })
-            : _jsx(MdFlipCameraAndroid, { size: 30, style: { ...iconTransition } }),
+            ? jsxRuntimeExports.jsx(MdFlipCameraAndroid, { size: 30, style: { ...iconTransition } })
+            : jsxRuntimeExports.jsx(MdFlipCameraAndroid, { size: 30, style: { ...iconTransition } }),
       }),
   });
 });
-export default CameraSwitch;
+
+export { CameraSwitch as default };
+//# sourceMappingURL=CameraSwitch.js.map

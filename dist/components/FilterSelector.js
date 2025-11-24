@@ -1,7 +1,8 @@
-import { jsx as _jsx, jsxs as _jsxs } from 'react/jsx-runtime';
-import { Box, Button, Stack, Typography } from '@mui/material';
-import { FILTERS } from '../utils/filters';
-import { toCssBlendMode } from '../utils/styleUtils';
+import { j as jsxRuntimeExports } from '../_virtual/jsx-runtime.js';
+import { Box, Typography, Stack, Button } from '@mui/material';
+import { FILTERS } from '../utils/filters.js';
+import { toCssBlendMode } from '../utils/styleUtils.js';
+
 /**
  * FilterSelector Component
  *
@@ -95,27 +96,31 @@ const FilterSelector = ({ allowedFilters = 'all', capturedImage, onSelectFilter,
     }
     filtersBySection[section].push([k, config]);
   });
-  return _jsxs(Box, {
+  return jsxRuntimeExports.jsxs(Box, {
     sx: {
       bgcolor: 'rgba(0,0,0,0.8)',
       width: '100%',
       p: 2,
     },
     children: [
-      _jsx(Typography, { variant: 'subtitle2', sx: { color: 'white', mb: 1 }, children: 'Choose Filter' }),
-      _jsx(Stack, {
+      jsxRuntimeExports.jsx(Typography, {
+        variant: 'subtitle2',
+        sx: { color: 'white', mb: 1 },
+        children: 'Choose Filter',
+      }),
+      jsxRuntimeExports.jsx(Stack, {
         direction: 'row',
         spacing: 0,
         sx: { overflowX: 'auto', pb: 1 },
         children: Object.entries(filtersBySection).map(([sectionName, filters]) =>
-          _jsxs(
+          jsxRuntimeExports.jsxs(
             Box,
             {
               sx: { position: 'relative', pr: 3, mr: 3 },
               children: [
-                _jsx(Box, {
+                jsxRuntimeExports.jsx(Box, {
                   sx: { width: '100%', mb: 1, position: 'absolute', top: 0 },
-                  children: _jsx(Typography, {
+                  children: jsxRuntimeExports.jsx(Typography, {
                     variant: 'overline',
                     sx: {
                       color: 'rgba(255,255,255,0.6)',
@@ -127,16 +132,16 @@ const FilterSelector = ({ allowedFilters = 'all', capturedImage, onSelectFilter,
                     children: sectionName,
                   }),
                 }),
-                _jsx(Box, {
+                jsxRuntimeExports.jsx(Box, {
                   sx: { display: 'flex', flexDirection: 'row', gap: 1, mt: 4 },
                   children: filters.map(
                     ([key, { name, filter, filterBlendMode, filterFill, imgBackground, imgBlendMode }]) =>
-                      _jsxs(
+                      jsxRuntimeExports.jsxs(
                         Box,
                         {
                           sx: { display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 70 },
                           children: [
-                            _jsxs(Button, {
+                            jsxRuntimeExports.jsxs(Button, {
                               onClick: () => onSelectFilter(key),
                               variant: selectedFilter === key ? 'contained' : 'outlined',
                               sx: {
@@ -148,7 +153,7 @@ const FilterSelector = ({ allowedFilters = 'all', capturedImage, onSelectFilter,
                                 position: 'relative',
                               },
                               children: [
-                                _jsx(Box, {
+                                jsxRuntimeExports.jsx(Box, {
                                   sx: {
                                     alignItems: 'center',
                                     background: imgBackground || 'transparent',
@@ -158,7 +163,7 @@ const FilterSelector = ({ allowedFilters = 'all', capturedImage, onSelectFilter,
                                     overflow: 'hidden',
                                     width: '100%',
                                   },
-                                  children: _jsx('img', {
+                                  children: jsxRuntimeExports.jsx('img', {
                                     src: capturedImage,
                                     alt: name,
                                     style: {
@@ -175,7 +180,7 @@ const FilterSelector = ({ allowedFilters = 'all', capturedImage, onSelectFilter,
                                 }),
                                 filterBlendMode &&
                                   typeof filterFill === 'string' &&
-                                  _jsx(Box, {
+                                  jsxRuntimeExports.jsx(Box, {
                                     sx: {
                                       position: 'absolute',
                                       top: 0,
@@ -189,7 +194,11 @@ const FilterSelector = ({ allowedFilters = 'all', capturedImage, onSelectFilter,
                                   }),
                               ],
                             }),
-                            _jsx(Typography, { variant: 'caption', sx: { color: 'white', mt: 0.5 }, children: name }),
+                            jsxRuntimeExports.jsx(Typography, {
+                              variant: 'caption',
+                              sx: { color: 'white', mt: 0.5 },
+                              children: name,
+                            }),
                           ],
                         },
                         key
@@ -205,4 +214,6 @@ const FilterSelector = ({ allowedFilters = 'all', capturedImage, onSelectFilter,
     ],
   });
 };
-export default FilterSelector;
+
+export { FilterSelector as default };
+//# sourceMappingURL=FilterSelector.js.map

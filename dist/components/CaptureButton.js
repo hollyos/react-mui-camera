@@ -1,8 +1,9 @@
-import { jsx as _jsx } from 'react/jsx-runtime';
+import { j as jsxRuntimeExports } from '../_virtual/jsx-runtime.js';
 import React from 'react';
 import { Box, Button } from '@mui/material';
-import { MdOutlinePhotoCamera } from 'react-icons/md';
-import { useDeviceInfo } from '../hooks/useDeviceInfo';
+import { MdOutlinePhotoCamera } from '../node_modules/.pnpm/react-icons@5.5.0_react@19.2.0/node_modules/react-icons/md/index.js';
+import { useDeviceInfo } from '../hooks/useDeviceInfo.js';
+
 /**
  * CaptureButton Component
  *
@@ -54,7 +55,7 @@ import { useDeviceInfo } from '../hooks/useDeviceInfo';
  */
 const CaptureButton = React.memo(({ onCapture, isStreaming }) => {
   const { isMobile, mobileOS } = useDeviceInfo();
-  return _jsx(Box, {
+  return jsxRuntimeExports.jsx(Box, {
     sx: {
       border: mobileOS === 'ios' ? '4px solid white' : 'none',
       borderRadius: '50%',
@@ -64,7 +65,7 @@ const CaptureButton = React.memo(({ onCapture, isStreaming }) => {
       bottom: 0,
       left: '50%',
     },
-    children: _jsx(Button, {
+    children: jsxRuntimeExports.jsx(Button, {
       variant: 'contained',
       onClick: onCapture,
       disabled: !isStreaming,
@@ -79,8 +80,10 @@ const CaptureButton = React.memo(({ onCapture, isStreaming }) => {
           bgcolor: 'primary.dark',
         },
       },
-      children: !isMobile && _jsx(MdOutlinePhotoCamera, { size: 40, fill: 'white' }),
+      children: !isMobile && jsxRuntimeExports.jsx(MdOutlinePhotoCamera, { size: 40, fill: 'white' }),
     }),
   });
 });
-export default CaptureButton;
+
+export { CaptureButton as default };
+//# sourceMappingURL=CaptureButton.js.map

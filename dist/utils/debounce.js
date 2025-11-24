@@ -1,7 +1,10 @@
-export function debounce(func, wait) {
+function debounce(func, wait) {
   let timeout;
   return function (...args) {
     if (timeout) clearTimeout(timeout);
     timeout = setTimeout(() => func(...args), wait);
   };
 }
+
+export { debounce };
+//# sourceMappingURL=debounce.js.map

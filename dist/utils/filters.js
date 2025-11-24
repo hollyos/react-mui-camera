@@ -76,7 +76,7 @@
  * });
  * ```
  */
-export const FILTERS = {
+const FILTERS = {
   // ==========================================
   // BASIC FILTERS
   // Simple, single-purpose adjustments
@@ -406,3 +406,6 @@ export const FILTERS = {
     imgBackground: '#42a4ff',
   },
 };
+
+export { FILTERS };
+//# sourceMappingURL=filters.js.map

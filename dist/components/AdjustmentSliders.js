@@ -1,29 +1,33 @@
-import { jsx as _jsx, jsxs as _jsxs } from 'react/jsx-runtime';
+import { j as jsxRuntimeExports } from '../_virtual/jsx-runtime.js';
 import React from 'react';
-import { Box, Slider, Stack, Typography } from '@mui/material';
-import { MdOutlineWbSunny, MdContrast } from 'react-icons/md';
-import { BsDropletHalf } from 'react-icons/bs';
+import { Box, Stack, Typography, Slider } from '@mui/material';
+import {
+  MdOutlineWbSunny,
+  MdContrast,
+} from '../node_modules/.pnpm/react-icons@5.5.0_react@19.2.0/node_modules/react-icons/md/index.js';
+import { BsDropletHalf } from '../node_modules/.pnpm/react-icons@5.5.0_react@19.2.0/node_modules/react-icons/bs/index.js';
+
 const AdjustmentSliders = React.memo(({ imageAdjustments, onAdjustmentsChange }) => {
-  return _jsxs(Box, {
+  return jsxRuntimeExports.jsxs(Box, {
     children: [
-      _jsxs(Box, {
+      jsxRuntimeExports.jsxs(Box, {
         sx: { mb: 2 },
         children: [
-          _jsxs(Stack, {
+          jsxRuntimeExports.jsxs(Stack, {
             direction: 'row',
             alignItems: 'center',
             spacing: 1,
             children: [
-              _jsx(MdOutlineWbSunny, { size: 20, color: 'white' }),
-              _jsx(Typography, { variant: 'body2', sx: { color: 'white' }, children: 'Brightness' }),
-              _jsxs(Typography, {
+              jsxRuntimeExports.jsx(MdOutlineWbSunny, { size: 20, color: 'white' }),
+              jsxRuntimeExports.jsx(Typography, { variant: 'body2', sx: { color: 'white' }, children: 'Brightness' }),
+              jsxRuntimeExports.jsxs(Typography, {
                 variant: 'caption',
                 sx: { color: 'rgba(255,255,255,0.6)', ml: 'auto' },
                 children: [imageAdjustments.brightness, '%'],
               }),
             ],
           }),
-          _jsx(Slider, {
+          jsxRuntimeExports.jsx(Slider, {
             min: 50,
             max: 150,
             value: imageAdjustments.brightness,
@@ -40,24 +44,24 @@ const AdjustmentSliders = React.memo(({ imageAdjustments, onAdjustmentsChange })
           }),
         ],
       }),
-      _jsxs(Box, {
+      jsxRuntimeExports.jsxs(Box, {
         sx: { mb: 2 },
         children: [
-          _jsxs(Stack, {
+          jsxRuntimeExports.jsxs(Stack, {
             direction: 'row',
             alignItems: 'center',
             spacing: 1,
             children: [
-              _jsx(MdContrast, { size: 20, color: 'white' }),
-              _jsx(Typography, { variant: 'body2', sx: { color: 'white' }, children: 'Contrast' }),
-              _jsxs(Typography, {
+              jsxRuntimeExports.jsx(MdContrast, { size: 20, color: 'white' }),
+              jsxRuntimeExports.jsx(Typography, { variant: 'body2', sx: { color: 'white' }, children: 'Contrast' }),
+              jsxRuntimeExports.jsxs(Typography, {
                 variant: 'caption',
                 sx: { color: 'rgba(255,255,255,0.6)', ml: 'auto' },
                 children: [imageAdjustments.contrast, '%'],
               }),
             ],
           }),
-          _jsx(Slider, {
+          jsxRuntimeExports.jsx(Slider, {
             min: 50,
             max: 150,
             value: imageAdjustments.contrast,
@@ -74,23 +78,23 @@ const AdjustmentSliders = React.memo(({ imageAdjustments, onAdjustmentsChange })
           }),
         ],
       }),
-      _jsxs(Box, {
+      jsxRuntimeExports.jsxs(Box, {
         children: [
-          _jsxs(Stack, {
+          jsxRuntimeExports.jsxs(Stack, {
             direction: 'row',
             alignItems: 'center',
             spacing: 1,
             children: [
-              _jsx(BsDropletHalf, { size: 20, color: 'white' }),
-              _jsx(Typography, { variant: 'body2', sx: { color: 'white' }, children: 'Saturation' }),
-              _jsxs(Typography, {
+              jsxRuntimeExports.jsx(BsDropletHalf, { size: 20, color: 'white' }),
+              jsxRuntimeExports.jsx(Typography, { variant: 'body2', sx: { color: 'white' }, children: 'Saturation' }),
+              jsxRuntimeExports.jsxs(Typography, {
                 variant: 'caption',
                 sx: { color: 'rgba(255,255,255,0.6)', ml: 'auto' },
                 children: [imageAdjustments.saturation, '%'],
               }),
             ],
           }),
-          _jsx(Slider, {
+          jsxRuntimeExports.jsx(Slider, {
             min: 0,
             max: 200,
             value: imageAdjustments.saturation,
@@ -110,4 +114,6 @@ const AdjustmentSliders = React.memo(({ imageAdjustments, onAdjustmentsChange })
     ],
   });
 });
-export default AdjustmentSliders;
+
+export { AdjustmentSliders as default };
+//# sourceMappingURL=AdjustmentSliders.js.map

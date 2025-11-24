@@ -1,8 +1,12 @@
-import { jsx as _jsx, jsxs as _jsxs } from 'react/jsx-runtime';
+import { j as jsxRuntimeExports } from '../_virtual/jsx-runtime.js';
 import React from 'react';
-import { IconButton, Stack, Typography, Box } from '@mui/material';
-import { BsSliders } from 'react-icons/bs';
-import { MdFlip, MdClose } from 'react-icons/md';
+import { Box, Stack, IconButton, Typography } from '@mui/material';
+import { BsSliders } from '../node_modules/.pnpm/react-icons@5.5.0_react@19.2.0/node_modules/react-icons/bs/index.js';
+import {
+  MdFlip,
+  MdClose,
+} from '../node_modules/.pnpm/react-icons@5.5.0_react@19.2.0/node_modules/react-icons/md/index.js';
+
 /**
  * CameraControls Component
  *
@@ -40,7 +44,7 @@ import { MdFlip, MdClose } from 'react-icons/md';
  * @returns {JSX.Element} A header bar with camera control buttons and dynamic title
  */
 const CameraControls = React.memo(({ isFlipped, onClose, showControls, toggleControls, toggleFlip }) => {
-  return _jsx(Box, {
+  return jsxRuntimeExports.jsx(Box, {
     sx: {
       position: 'absolute',
       top: 0,
@@ -52,41 +56,43 @@ const CameraControls = React.memo(({ isFlipped, onClose, showControls, toggleCon
       height: 72,
       boxSizing: 'border-box',
     },
-    children: _jsxs(Stack, {
+    children: jsxRuntimeExports.jsxs(Stack, {
       direction: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
       children: [
-        _jsxs(Box, {
+        jsxRuntimeExports.jsxs(Box, {
           children: [
-            _jsx(IconButton, {
+            jsxRuntimeExports.jsx(IconButton, {
               onClick: toggleControls,
               sx: { p: 1, color: 'white' },
-              children: _jsx(BsSliders, { size: 24 }),
+              children: jsxRuntimeExports.jsx(BsSliders, { size: 24 }),
             }),
-            _jsx(IconButton, {
+            jsxRuntimeExports.jsx(IconButton, {
               onClick: toggleFlip,
               sx: { p: 1, color: 'white' },
-              children: _jsx(MdFlip, {
+              children: jsxRuntimeExports.jsx(MdFlip, {
                 size: 24,
                 style: { transition: 'transform 0.3s', transform: isFlipped ? 'scaleX(1)' : 'scaleX(-1)' },
               }),
             }),
           ],
         }),
-        _jsx(Typography, {
+        jsxRuntimeExports.jsx(Typography, {
           variant: 'h6',
           sx: { color: 'white', position: 'absolute', left: '50%', transform: 'translateX(-50%)' },
           children: showControls ? 'Adjustments' : 'Camera',
         }),
         onClose &&
-          _jsx(IconButton, {
+          jsxRuntimeExports.jsx(IconButton, {
             onClick: onClose,
             sx: { p: 1, color: 'white' },
-            children: _jsx(MdClose, { width: 24, height: 24, fill: 'white' }),
+            children: jsxRuntimeExports.jsx(MdClose, { width: 24, height: 24, fill: 'white' }),
           }),
       ],
     }),
   });
 });
-export default CameraControls;
+
+export { CameraControls as default };
+//# sourceMappingURL=CameraControls.js.map

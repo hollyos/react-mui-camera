@@ -1,6 +1,6 @@
 {
   "name": "react-mui-camera",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Universal Camera component for React that utilizes the Material Design System.",
   "homepage": "https://hollyos.github.io/react-mui-camera",
   "author": "Holly Springsteen <hhspringsteen@gmail.com>",
@@ -44,7 +44,7 @@
   "module": "dist/index.js",
   "exports": {
     ".": {
-      "import": "./dist/index.esm.js",
+      "import": "./dist/index.js",
       "require": "./dist/index.js"
     }
   },
